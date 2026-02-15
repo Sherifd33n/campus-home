@@ -3,7 +3,7 @@ import { institutions } from "@/data/listing";
 import { schoolHostels } from "../../../../data/hostel"
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
-import Image from "next/image";
+// import Image from "next/image";
 
 interface Props {
   params: { stateId: string; schoolSlug: string };
@@ -79,7 +79,7 @@ export default async function SchoolPage({ params }: Props) {
                 {/* Hostel Image - You'll need to add images to your hostel data */}
                 <div className="relative h-48 bg-gray-200">
                   {/* Placeholder - replace with actual image when available */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-blue-600 flex items-center justify-center">
                     <span className="text-white text-2xl font-bold">
                       {hostel.name.charAt(0)}
                     </span>
