@@ -80,7 +80,7 @@ export default function StateFilter() {
           {filteredInstitutions.map((institution) => (
             <Link
               key={institution.id}
-              href={`/states/${stateId}/${institution.schoolSlug}`} 
+              href={`/states/${institution.stateId}/${institution.schoolSlug}`}
               className="relative h-55 rounded-xl overflow-hidden group">
               <Image
                 src={institution.image}
