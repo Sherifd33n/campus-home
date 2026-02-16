@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-// import Navbar from "@/components/Navbar";
-// import Footer from "@/components/Footer";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
 
 export const metadata: Metadata = {
   title: "Campus Home",
@@ -13,6 +10,9 @@ export const metadata: Metadata = {
 };
 
 import { Outfit } from "next/font/google";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { Toaster } from "sonner";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -29,9 +29,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.className} antialiased`}>
         {" "}
-        {/* <Navbar /> */}
+        <Navbar />
         {children}
-        {/* <Footer /> */}
+        <Toaster position="top-center" richColors />
+        <Footer />
         <ToastContainer position="top-right" />
       </body>
     </html>

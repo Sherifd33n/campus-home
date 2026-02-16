@@ -2,6 +2,7 @@ import { states } from "@/data/state";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import StateFilter from "@/components/StateFilter"; 
+import Container from "@/components/Container";
 
 interface Props {
   params: { stateId: string };
@@ -15,13 +16,14 @@ export default async function StatePage({ params }: Props) {
 
   return (
     <div className="p-10 bg-[#f6f7f8]">
-      <div className="flex items-center gap-3 text-[#7c8a9d] text-sm">
+      <Container>
+         <div className="flex items-center gap-3 text-[#7c8a9d] text-sm">
         <Link href="/" className="hover:text-[#278cf1]">
           Home
         </Link>
         <FaChevronRight size={10} />
         <Link href="/states" className="hover:text-[#278cf1]">
-          All States
+          All states
         </Link>
         <FaChevronRight size={10} />
         <p className="text-[#278cf1]">{state.name}</p>
@@ -36,9 +38,12 @@ export default async function StatePage({ params }: Props) {
          top institutions.
       </p>
 
-      <div className="bg-white rounded-md p-2 mt-10">
+      <div className="bg-white rounded-md p-4 mt-10">
         <StateFilter /> 
       </div>
+      </Container>
+
+     
     </div>
   );
 }

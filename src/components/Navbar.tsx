@@ -10,8 +10,8 @@ const Navbar = () => {
         <Logo />
         <ul className="flex items-center gap-8">
           <li>
-            <Link href="/" className="hover:text-gray-500 duration-150">
-              Browse Hostels
+            <Link href="/favorite" className="hover:text-gray-500 duration-150">
+              Favorite
             </Link>
           </li>
           <li>

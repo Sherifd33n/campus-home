@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
 // import Container from "@/components/Container";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import HomePage from "@/components/HomePage";
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
     <div className="">
       {/* <Container> */}
-      <Navbar />
+      {/* <Navbar /> */}
       <div>
-        <HomePage/>
+        <HomePage />
       </div>
-      <Footer />
+      {/* <Footer /> */}
       {/* </Container> */}
     </div>
   );

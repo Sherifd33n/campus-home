@@ -1,6 +1,769 @@
 import { Institution } from "../../.next/types/listing";
 
+export const nigeriaStates = [
+  "abia", "adamawa", "akwa-ibom", "anambra", "bauchi", "bayelsa", "benue", "borno",
+  "cross-river", "delta", "ebonyi", "edo", "ekiti", "enugu", "gombe", "imo",
+  "jigawa", "kaduna", "kano", "katsina", "kebbi", "kogi", "kwara", "lagos",
+  "nasarawa", "niger", "ogun", "ondo", "osun", "oyo", "plateau", "rivers",
+  "sokoto", "taraba", "yobe", "zamfara", "abuja"
+];
+
+const schoolImages = [
+  "/images/alhikmah-1.jpg",
+  "/images/aviation-1.jpg",
+  "/images/summit-1.jpg",
+  "/images/kwasu-1.jpg",
+];
+
 export const institutions: Institution[] = [
+  // =====================
+  // ABIA STATE
+  // =====================
+  {
+    id: "absu",
+    name: "Abia State University",
+    shortName: "ABSU",
+    stateId: "abia",
+    type: "university",
+    city: "Uturu",
+    image: schoolImages[0],
+    schoolSlug: "absu",
+  },
+  {
+    id: "mouau",
+    name: "Michael Okpara University of Agriculture",
+    shortName: "MOUAU",
+    stateId: "abia",
+    type: "university",
+    city: "Umudike",
+    image: schoolImages[1],
+    schoolSlug: "mouau",
+  },
+  {
+    id: "abia-poly",
+    name: "Abia State Polytechnic",
+    shortName: "ABIA POLY",
+    stateId: "abia",
+    type: "polytechnic",
+    city: "Aba",
+    image: schoolImages[2],
+    schoolSlug: "abia-poly",
+  },
+
+  // =====================
+  // ADAMAWA STATE
+  // =====================
+  {
+    id: "mautech",
+    name: "Modibbo Adama University of Technology",
+    shortName: "MAUTECH",
+    stateId: "adamawa",
+    type: "university",
+    city: "Yola",
+    image: schoolImages[0],
+    schoolSlug: "mautech",
+  },
+  {
+    id: "adsu",
+    name: "Adamawa State University",
+    shortName: "ADSU",
+    stateId: "adamawa",
+    type: "university",
+    city: "Mubi",
+    image: schoolImages[1],
+    schoolSlug: "adsu",
+  },
+  {
+    id: "adamawa-poly",
+    name: "Adamawa State Polytechnic",
+    shortName: "ADAMAWA POLY",
+    stateId: "adamawa",
+    type: "polytechnic",
+    city: "Yola",
+    image: schoolImages[2],
+    schoolSlug: "adamawa-poly",
+  },
+
+  // =====================
+  // AKWA IBOM STATE
+  // =====================
+  {
+    id: "uniuyo",
+    name: "University of Uyo",
+    shortName: "UNIUYO",
+    stateId: "akwa-ibom",
+    type: "university",
+    city: "Uyo",
+    image: schoolImages[0],
+    schoolSlug: "uniuyo",
+  },
+  {
+    id: "aksu",
+    name: "Akwa Ibom State University",
+    shortName: "AKSU",
+    stateId: "akwa-ibom",
+    type: "university",
+    city: "Ikot Akpaden",
+    image: schoolImages[1],
+    schoolSlug: "aksu",
+  },
+  {
+    id: "akwa-ibom-poly",
+    name: "Akwa Ibom State Polytechnic",
+    shortName: "AKWA IBOM POLY",
+    stateId: "akwa-ibom",
+    type: "polytechnic",
+    city: "Ikot Osurua",
+    image: schoolImages[2],
+    schoolSlug: "akwa-ibom-poly",
+  },
+
+  // =====================
+  // ANAMBRA STATE
+  // =====================
+  {
+    id: "unizik",
+    name: "Nnamdi Azikiwe University",
+    shortName: "UNIZIK",
+    stateId: "anambra",
+    type: "university",
+    city: "Awka",
+    image: schoolImages[0],
+    schoolSlug: "unizik",
+  },
+  {
+    id: "coou",
+    name: "Chukwuemeka Odumegwu Ojukwu University",
+    shortName: "COOU",
+    stateId: "anambra",
+    type: "university",
+    city: "Uli",
+    image: schoolImages[1],
+    schoolSlug: "coou",
+  },
+  {
+    id: "anambra-poly",
+    name: "Federal Polytechnic Oko",
+    shortName: "OKO POLY",
+    stateId: "anambra",
+    type: "polytechnic",
+    city: "Oko",
+    image: schoolImages[2],
+    schoolSlug: "anambra-poly",
+  },
+
+  // =====================
+  // BAUCHI STATE
+  // =====================
+  {
+    id: "atbu",
+    name: "Abubakar Tafawa Balewa University",
+    shortName: "ATBU",
+    stateId: "bauchi",
+    type: "university",
+    city: "Bauchi",
+    image: schoolImages[0],
+    schoolSlug: "atbu",
+  },
+  {
+    id: "basu",
+    name: "Bauchi State University",
+    shortName: "BASU",
+    stateId: "bauchi",
+    type: "university",
+    city: "Gadau",
+    image: schoolImages[1],
+    schoolSlug: "basu",
+  },
+  {
+    id: "bauchi-poly",
+    name: "Federal Polytechnic Bauchi",
+    shortName: "BAUCHI POLY",
+    stateId: "bauchi",
+    type: "polytechnic",
+    city: "Bauchi",
+    image: schoolImages[2],
+    schoolSlug: "bauchi-poly",
+  },
+
+  // =====================
+  // BAYELSA STATE
+  // =====================
+  {
+    id: "noun-bayelsa",
+    name: "Niger Delta University",
+    shortName: "NDU",
+    stateId: "bayelsa",
+    type: "university",
+    city: "Wilberforce Island",
+    image: schoolImages[0],
+    schoolSlug: "ndu",
+  },
+  {
+    id: "bayelsa-medical",
+    name: "Bayelsa Medical University",
+    shortName: "BMU",
+    stateId: "bayelsa",
+    type: "university",
+    city: "Yenagoa",
+    image: schoolImages[1],
+    schoolSlug: "bayelsa-medical",
+  },
+  {
+    id: "bayelsa-poly",
+    name: "Federal Polytechnic Ekowe",
+    shortName: "EKOWE POLY",
+    stateId: "bayelsa",
+    type: "polytechnic",
+    city: "Ekowe",
+    image: schoolImages[2],
+    schoolSlug: "bayelsa-poly",
+  },
+
+  // =====================
+  // BENUE STATE
+  // =====================
+  {
+    id: "bsu",
+    name: "Benue State University",
+    shortName: "BSU",
+    stateId: "benue",
+    type: "university",
+    city: "Makurdi",
+    image: schoolImages[0],
+    schoolSlug: "bsu",
+  },
+  {
+    id: "uam",
+    name: "University of Agriculture, Makurdi",
+    shortName: "UAM",
+    stateId: "benue",
+    type: "university",
+    city: "Makurdi",
+    image: schoolImages[1],
+    schoolSlug: "uam",
+  },
+  {
+    id: "benue-poly",
+    name: "Benue State Polytechnic",
+    shortName: "BENUE POLY",
+    stateId: "benue",
+    type: "polytechnic",
+    city: "Ugbokolo",
+    image: schoolImages[2],
+    schoolSlug: "benue-poly",
+  },
+
+  // =====================
+  // BORNO STATE
+  // =====================
+  {
+    id: "unimaid",
+    name: "University of Maiduguri",
+    shortName: "UNIMAID",
+    stateId: "borno",
+    type: "university",
+    city: "Maiduguri",
+    image: schoolImages[0],
+    schoolSlug: "unimaid",
+  },
+  {
+    id: "basu-borno",
+    name: "Borno State University",
+    shortName: "BOSU",
+    stateId: "borno",
+    type: "university",
+    city: "Maiduguri",
+    image: schoolImages[1],
+    schoolSlug: "basu-borno",
+  },
+  {
+    id: "borno-poly",
+    name: "Ramat Polytechnic",
+    shortName: "RAMAT POLY",
+    stateId: "borno",
+    type: "polytechnic",
+    city: "Maiduguri",
+    image: schoolImages[2],
+    schoolSlug: "borno-poly",
+  },
+
+  // =====================
+  // CROSS RIVER STATE
+  // =====================
+  {
+    id: "unical",
+    name: "University of Calabar",
+    shortName: "UNICAL",
+    stateId: "cross-river",
+    type: "university",
+    city: "Calabar",
+    image: schoolImages[0],
+    schoolSlug: "unical",
+  },
+  {
+    id: "crutech",
+    name: "Cross River University of Technology",
+    shortName: "CRUTECH",
+    stateId: "cross-river",
+    type: "university",
+    city: "Calabar",
+    image: schoolImages[1],
+    schoolSlug: "crutech",
+  },
+  {
+    id: "cross-river-poly",
+    name: "Federal Polytechnic Ugep",
+    shortName: "UGEP POLY",
+    stateId: "cross-river",
+    type: "polytechnic",
+    city: "Ugep",
+    image: schoolImages[2],
+    schoolSlug: "cross-river-poly",
+  },
+
+  // =====================
+  // DELTA STATE
+  // =====================
+  {
+    id: "delsu",
+    name: "Delta State University",
+    shortName: "DELSU",
+    stateId: "delta",
+    type: "university",
+    city: "Abraka",
+    image: schoolImages[0],
+    schoolSlug: "delsu",
+  },
+  {
+    id: "unidel",
+    name: "Federal University of Petroleum Resources",
+    shortName: "FUPRE",
+    stateId: "delta",
+    type: "university",
+    city: "Effurun",
+    image: schoolImages[1],
+    schoolSlug: "fupre",
+  },
+  {
+    id: "delta-poly",
+    name: "Delta State Polytechnic",
+    shortName: "DELTA POLY",
+    stateId: "delta",
+    type: "polytechnic",
+    city: "Ozoro",
+    image: schoolImages[2],
+    schoolSlug: "delta-poly",
+  },
+
+  // =====================
+  // EBONYI STATE
+  // =====================
+  {
+    id: "ebsu",
+    name: "Ebonyi State University",
+    shortName: "EBSU",
+    stateId: "ebonyi",
+    type: "university",
+    city: "Abakaliki",
+    image: schoolImages[0],
+    schoolSlug: "ebsu",
+  },
+  {
+    id: "funai",
+    name: "Federal University Ndufu-Alike",
+    shortName: "FUNAI",
+    stateId: "ebonyi",
+    type: "university",
+    city: "Ikwo",
+    image: schoolImages[1],
+    schoolSlug: "funai",
+  },
+  {
+    id: "ebonyi-poly",
+    name: "Akanu Ibiam Federal Polytechnic",
+    shortName: "AKANU POLY",
+    stateId: "ebonyi",
+    type: "polytechnic",
+    city: "Unwana",
+    image: schoolImages[2],
+    schoolSlug: "ebonyi-poly",
+  },
+
+  // =====================
+  // EDO STATE
+  // =====================
+  {
+    id: "uniben",
+    name: "University of Benin",
+    shortName: "UNIBEN",
+    stateId: "edo",
+    type: "university",
+    city: "Benin City",
+    image: schoolImages[0],
+    schoolSlug: "uniben",
+  },
+  {
+    id: "aau",
+    name: "Ambrose Alli University",
+    shortName: "AAU",
+    stateId: "edo",
+    type: "university",
+    city: "Ekpoma",
+    image: schoolImages[1],
+    schoolSlug: "aau",
+  },
+  {
+    id: "edo-poly",
+    name: "Auchi Polytechnic",
+    shortName: "AUCHI POLY",
+    stateId: "edo",
+    type: "polytechnic",
+    city: "Auchi",
+    image: schoolImages[2],
+    schoolSlug: "edo-poly",
+  },
+
+  // =====================
+  // EKITI STATE
+  // =====================
+  {
+    id: "eksu",
+    name: "Ekiti State University",
+    shortName: "EKSU",
+    stateId: "ekiti",
+    type: "university",
+    city: "Ado Ekiti",
+    image: schoolImages[0],
+    schoolSlug: "eksu",
+  },
+  {
+    id: "fuoye",
+    name: "Federal University Oye-Ekiti",
+    shortName: "FUOYE",
+    stateId: "ekiti",
+    type: "university",
+    city: "Oye Ekiti",
+    image: schoolImages[1],
+    schoolSlug: "fuoye",
+  },
+  {
+    id: "ekiti-poly",
+    name: "Federal Polytechnic Ado-Ekiti",
+    shortName: "EKITI POLY",
+    stateId: "ekiti",
+    type: "polytechnic",
+    city: "Ado Ekiti",
+    image: schoolImages[2],
+    schoolSlug: "ekiti-poly",
+  },
+
+  // =====================
+  // ENUGU STATE
+  // =====================
+  {
+    id: "unn",
+    name: "University of Nigeria, Nsukka",
+    shortName: "UNN",
+    stateId: "enugu",
+    type: "university",
+    city: "Nsukka",
+    image: schoolImages[0],
+    schoolSlug: "unn",
+  },
+  {
+    id: "esut",
+    name: "Enugu State University of Science and Technology",
+    shortName: "ESUT",
+    stateId: "enugu",
+    type: "university",
+    city: "Enugu",
+    image: schoolImages[1],
+    schoolSlug: "esut",
+  },
+  {
+    id: "enugu-poly",
+    name: "Institute of Management and Technology",
+    shortName: "IMT",
+    stateId: "enugu",
+    type: "polytechnic",
+    city: "Enugu",
+    image: schoolImages[2],
+    schoolSlug: "enugu-poly",
+  },
+
+  // =====================
+  // GOMBE STATE
+  // =====================
+  {
+    id: "gsu",
+    name: "Gombe State University",
+    shortName: "GSU",
+    stateId: "gombe",
+    type: "university",
+    city: "Gombe",
+    image: schoolImages[0],
+    schoolSlug: "gsu",
+  },
+  {
+    id: "fuk",
+    name: "Federal University Kashere",
+    shortName: "FUK",
+    stateId: "gombe",
+    type: "university",
+    city: "Kashere",
+    image: schoolImages[1],
+    schoolSlug: "fuk",
+  },
+  {
+    id: "gombe-poly",
+    name: "Federal Polytechnic Kaltungo",
+    shortName: "GOMBE POLY",
+    stateId: "gombe",
+    type: "polytechnic",
+    city: "Kaltungo",
+    image: schoolImages[2],
+    schoolSlug: "gombe-poly",
+  },
+
+  // =====================
+  // IMO STATE
+  // =====================
+  {
+    id: "imsu",
+    name: "Imo State University",
+    shortName: "IMSU",
+    stateId: "imo",
+    type: "university",
+    city: "Owerri",
+    image: schoolImages[0],
+    schoolSlug: "imsu",
+  },
+  {
+    id: "futo",
+    name: "Federal University of Technology, Owerri",
+    shortName: "FUTO",
+    stateId: "imo",
+    type: "university",
+    city: "Owerri",
+    image: schoolImages[1],
+    schoolSlug: "futo",
+  },
+  {
+    id: "imo-poly",
+    name: "Federal Polytechnic Nekede",
+    shortName: "IMO POLY",
+    stateId: "imo",
+    type: "polytechnic",
+    city: "Owerri",
+    image: schoolImages[2],
+    schoolSlug: "imo-poly",
+  },
+
+  // =====================
+  // JIGAWA STATE
+  // =====================
+  {
+    id: "fud",
+    name: "Federal University Dutse",
+    shortName: "FUD",
+    stateId: "jigawa",
+    type: "university",
+    city: "Dutse",
+    image: schoolImages[0],
+    schoolSlug: "fud",
+  },
+  {
+    id: "jigsu",
+    name: "Jigawa State University",
+    shortName: "JIGSU",
+    stateId: "jigawa",
+    type: "university",
+    city: "Kafin Hausa",
+    image: schoolImages[1],
+    schoolSlug: "jigsu",
+  },
+  {
+    id: "jigawa-poly",
+    name: "Federal Polytechnic Kazaure",
+    shortName: "JIGAWA POLY",
+    stateId: "jigawa",
+    type: "polytechnic",
+    city: "Kazaure",
+    image: schoolImages[2],
+    schoolSlug: "jigawa-poly",
+  },
+
+  // =====================
+  // KADUNA STATE
+  // =====================
+  {
+    id: "abu",
+    name: "Ahmadu Bello University",
+    shortName: "ABU",
+    stateId: "kaduna",
+    type: "university",
+    city: "Zaria",
+    image: schoolImages[0],
+    schoolSlug: "abu",
+  },
+  {
+    id: "kasu",
+    name: "Kaduna State University",
+    shortName: "KASU",
+    stateId: "kaduna",
+    type: "university",
+    city: "Kaduna",
+    image: schoolImages[1],
+    schoolSlug: "kasu",
+  },
+  {
+    id: "kadpoly",
+    name: "Kaduna Polytechnic",
+    shortName: "KADPOLY",
+    stateId: "kaduna",
+    type: "polytechnic",
+    city: "Kaduna",
+    image: schoolImages[2],
+    schoolSlug: "kadpoly",
+  },
+
+  // =====================
+  // KANO STATE
+  // =====================
+  {
+    id: "buk",
+    name: "Bayero University, Kano",
+    shortName: "BUK",
+    stateId: "kano",
+    type: "university",
+    city: "Kano",
+    image: schoolImages[0],
+    schoolSlug: "buk",
+  },
+  {
+    id: "kust",
+    name: "Kano University of Science and Technology",
+    shortName: "KUST",
+    stateId: "kano",
+    type: "university",
+    city: "Wudil",
+    image: schoolImages[1],
+    schoolSlug: "kust",
+  },
+  {
+    id: "kano-poly",
+    name: "Federal Polytechnic Kano",
+    shortName: "KANO POLY",
+    stateId: "kano",
+    type: "polytechnic",
+    city: "Kano",
+    image: schoolImages[2],
+    schoolSlug: "kano-poly",
+  },
+
+  // =====================
+  // KATSINA STATE
+  // =====================
+  {
+    id: "fudma",
+    name: "Federal University Dutsin-Ma",
+    shortName: "FUDMA",
+    stateId: "katsina",
+    type: "university",
+    city: "Dutsin-Ma",
+    image: schoolImages[0],
+    schoolSlug: "fudma",
+  },
+  {
+    id: "umyu",
+    name: "Umaru Musa Yar'Adua University",
+    shortName: "UMYU",
+    stateId: "katsina",
+    type: "university",
+    city: "Katsina",
+    image: schoolImages[1],
+    schoolSlug: "umyu",
+  },
+  {
+    id: "katsina-poly",
+    name: "Hassan Usman Katsina Polytechnic",
+    shortName: "KATSINA POLY",
+    stateId: "katsina",
+    type: "polytechnic",
+    city: "Katsina",
+    image: schoolImages[2],
+    schoolSlug: "katsina-poly",
+  },
+
+  // =====================
+  // KEBBI STATE
+  // =====================
+  {
+    id: "fubk",
+    name: "Federal University Birnin Kebbi",
+    shortName: "FUBK",
+    stateId: "kebbi",
+    type: "university",
+    city: "Birnin Kebbi",
+    image: schoolImages[0],
+    schoolSlug: "fubk",
+  },
+  {
+    id: "ksusta",
+    name: "Kebbi State University of Science and Technology",
+    shortName: "KSUSTA",
+    stateId: "kebbi",
+    type: "university",
+    city: "Aliero",
+    image: schoolImages[1],
+    schoolSlug: "ksusta",
+  },
+  {
+    id: "kebbi-poly",
+    name: "Waziri Umaru Federal Polytechnic",
+    shortName: "KEBBI POLY",
+    stateId: "kebbi",
+    type: "polytechnic",
+    city: "Birnin Kebbi",
+    image: schoolImages[2],
+    schoolSlug: "kebbi-poly",
+  },
+
+  // =====================
+  // KOGI STATE
+  // =====================
+  {
+    id: "ksu",
+    name: "Kogi State University",
+    shortName: "KSU",
+    stateId: "kogi",
+    type: "university",
+    city: "Anyigba",
+    image: schoolImages[0],
+    schoolSlug: "ksu",
+  },
+  {
+    id: "fulafia-kogi",
+    name: "Federal University Lokoja",
+    shortName: "FUL",
+    stateId: "kogi",
+    type: "university",
+    city: "Lokoja",
+    image: schoolImages[1],
+    schoolSlug: "ful",
+  },
+  {
+    id: "kogi-poly",
+    name: "Federal Polytechnic Idah",
+    shortName: "KOGI POLY",
+    stateId: "kogi",
+    type: "polytechnic",
+    city: "Idah",
+    image: schoolImages[2],
+    schoolSlug: "kogi-poly",
+  },
+
   // =====================
   // KWARA STATE
   // =====================
@@ -11,7 +774,7 @@ export const institutions: Institution[] = [
     stateId: "kwara",
     type: "university",
     city: "Ilorin",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[0],
     schoolSlug: "unilorin",
   },
   {
@@ -21,10 +784,8 @@ export const institutions: Institution[] = [
     stateId: "kwara",
     type: "university",
     city: "Malete",
-    image: "/images/aviation-1.jpg",
+    image: schoolImages[1],
     schoolSlug: "kwasu",
-
-
   },
   {
     id: "offa-poly",
@@ -33,9 +794,8 @@ export const institutions: Institution[] = [
     stateId: "kwara",
     type: "polytechnic",
     city: "Offa",
-    image: "/images/coe-ilorin-2.jpg",
+    image: schoolImages[2],
     schoolSlug: "offa-poly",
-
   },
 
   // =====================
@@ -48,9 +808,8 @@ export const institutions: Institution[] = [
     stateId: "lagos",
     type: "university",
     city: "Akoka",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[0],
     schoolSlug: "unilag",
-
   },
   {
     id: "lasu",
@@ -59,9 +818,8 @@ export const institutions: Institution[] = [
     stateId: "lagos",
     type: "university",
     city: "Ojo",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[1],
     schoolSlug: "lasu",
-
   },
   {
     id: "yabatech",
@@ -70,9 +828,178 @@ export const institutions: Institution[] = [
     stateId: "lagos",
     type: "polytechnic",
     city: "Yaba",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[2],
     schoolSlug: "yabatech",
+  },
 
+  // =====================
+  // NASARAWA STATE
+  // =====================
+  {
+    id: "nsuk",
+    name: "Nasarawa State University",
+    shortName: "NSUK",
+    stateId: "nasarawa",
+    type: "university",
+    city: "Keffi",
+    image: schoolImages[0],
+    schoolSlug: "nsuk",
+  },
+  {
+    id: "fulafia",
+    name: "Federal University of Lafia",
+    shortName: "FULAFIA",
+    stateId: "nasarawa",
+    type: "university",
+    city: "Lafia",
+    image: schoolImages[1],
+    schoolSlug: "fulafia",
+  },
+  {
+    id: "nasarawa-poly",
+    name: "Federal Polytechnic Nasarawa",
+    shortName: "NASARAWA POLY",
+    stateId: "nasarawa",
+    type: "polytechnic",
+    city: "Nasarawa",
+    image: schoolImages[2],
+    schoolSlug: "nasarawa-poly",
+  },
+
+  // =====================
+  // NIGER STATE
+  // =====================
+  {
+    id: "futminna",
+    name: "Federal University of Technology, Minna",
+    shortName: "FUTMINNA",
+    stateId: "niger",
+    type: "university",
+    city: "Minna",
+    image: schoolImages[0],
+    schoolSlug: "futminna",
+  },
+  {
+    id: "ibbu",
+    name: "Ibrahim Badamasi Babangida University",
+    shortName: "IBBU",
+    stateId: "niger",
+    type: "university",
+    city: "Lapai",
+    image: schoolImages[1],
+    schoolSlug: "ibbu",
+  },
+  {
+    id: "niger-poly",
+    name: "Federal Polytechnic Bida",
+    shortName: "NIGER POLY",
+    stateId: "niger",
+    type: "polytechnic",
+    city: "Bida",
+    image: schoolImages[2],
+    schoolSlug: "niger-poly",
+  },
+
+  // =====================
+  // OGUN STATE
+  // =====================
+  {
+    id: "funaab",
+    name: "Federal University of Agriculture, Abeokuta",
+    shortName: "FUNAAB",
+    stateId: "ogun",
+    type: "university",
+    city: "Abeokuta",
+    image: schoolImages[0],
+    schoolSlug: "funaab",
+  },
+  {
+    id: "oou",
+    name: "Olabisi Onabanjo University",
+    shortName: "OOU",
+    stateId: "ogun",
+    type: "university",
+    city: "Ago-Iwoye",
+    image: schoolImages[1],
+    schoolSlug: "oou",
+  },
+  {
+    id: "ogun-poly",
+    name: "Moshood Abiola Polytechnic",
+    shortName: "MAPOLY",
+    stateId: "ogun",
+    type: "polytechnic",
+    city: "Abeokuta",
+    image: schoolImages[2],
+    schoolSlug: "ogun-poly",
+  },
+
+  // =====================
+  // ONDO STATE
+  // =====================
+  {
+    id: "futa",
+    name: "Federal University of Technology, Akure",
+    shortName: "FUTA",
+    stateId: "ondo",
+    type: "university",
+    city: "Akure",
+    image: schoolImages[0],
+    schoolSlug: "futa",
+  },
+  {
+    id: "aaua",
+    name: "Adekunle Ajasin University",
+    shortName: "AAUA",
+    stateId: "ondo",
+    type: "university",
+    city: "Akungba-Akoko",
+    image: schoolImages[1],
+    schoolSlug: "aaua",
+  },
+  {
+    id: "ondo-poly",
+    name: "Rufus Giwa Polytechnic",
+    shortName: "ONDO POLY",
+    stateId: "ondo",
+    type: "polytechnic",
+    city: "Owo",
+    image: schoolImages[2],
+    schoolSlug: "ondo-poly",
+  },
+
+  // =====================
+  // OSUN STATE
+  // =====================
+  {
+    id: "oau",
+    name: "Obafemi Awolowo University",
+    shortName: "OAU",
+    stateId: "osun",
+    type: "university",
+    city: "Ile-Ife",
+    image: schoolImages[0],
+    schoolSlug: "oau",
+  },
+  {
+    id: "uniosun",
+    name: "Osun State University",
+    shortName: "UNIOSUN",
+    stateId: "osun",
+    type: "university",
+    city: "Osogbo",
+    image: schoolImages[1],
+    schoolSlug: "uniosun",
+  },
+  {
+    id: "osun-poly",
+    name: "Federal Polytechnic Ede",
+    shortName: "OSUN POLY",
+    stateId: "osun",
+    type: "polytechnic",
+    city: "Ede",
+    image: schoolImages[2],
+    schoolSlug: "osun-poly",
   },
 
   // =====================
@@ -85,9 +1012,8 @@ export const institutions: Institution[] = [
     stateId: "oyo",
     type: "university",
     city: "Ibadan",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[0],
     schoolSlug: "ui",
-
   },
   {
     id: "lautech",
@@ -96,46 +1022,52 @@ export const institutions: Institution[] = [
     stateId: "oyo",
     type: "university",
     city: "Ogbomoso",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[1],
     schoolSlug: "lautech",
-
   },
   {
-    id: "nile",
-    name: "Nile University of Nigeria",
-    shortName: "NILE",
-    stateId: "abuja",
-    type: "university",
-    city: "Jabi",
-    image: "/images/alhikmah-1.jpg",
-    schoolSlug: "nile",
-
-  },
-
-  // =====================
-  // KADUNA STATE
-  // =====================
-  {
-    id: "abu-zaria",
-    name: "Ahmadu Bello University",
-    shortName: "ABU",
-    stateId: "kaduna",
-    type: "university",
-    city: "Zaria",
-    image: "/images/alhikmah-1.jpg",
-    schoolSlug: "abu",
-
-  },
-  {
-    id: "kadpoly",
-    name: "Kaduna Polytechnic",
-    shortName: "KADPOLY",
-    stateId: "kaduna",
+    id: "poly-ibadan",
+    name: "The Polytechnic, Ibadan",
+    shortName: "POLY IBADAN",
+    stateId: "oyo",
     type: "polytechnic",
-    city: "Kaduna",
-    image: "/images/alhikmah-1.jpg",
-    schoolSlug: "kadpoly",
+    city: "Ibadan",
+    image: schoolImages[2],
+    schoolSlug: "poly-ibadan",
+  },
 
+  // =====================
+  // PLATEAU STATE
+  // =====================
+  {
+    id: "unijos",
+    name: "University of Jos",
+    shortName: "UNIJOS",
+    stateId: "plateau",
+    type: "university",
+    city: "Jos",
+    image: schoolImages[0],
+    schoolSlug: "unijos",
+  },
+  {
+    id: "plasu",
+    name: "Plateau State University",
+    shortName: "PLASU",
+    stateId: "plateau",
+    type: "university",
+    city: "Bokkos",
+    image: schoolImages[1],
+    schoolSlug: "plasu",
+  },
+  {
+    id: "plateau-poly",
+    name: "Federal Polytechnic Vom",
+    shortName: "PLATEAU POLY",
+    stateId: "plateau",
+    type: "polytechnic",
+    city: "Vom",
+    image: schoolImages[2],
+    schoolSlug: "plateau-poly",
   },
 
   // =====================
@@ -148,9 +1080,8 @@ export const institutions: Institution[] = [
     stateId: "rivers",
     type: "university",
     city: "Port Harcourt",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[0],
     schoolSlug: "uniport",
-
   },
   {
     id: "rsu",
@@ -159,11 +1090,190 @@ export const institutions: Institution[] = [
     stateId: "rivers",
     type: "university",
     city: "Port Harcourt",
-    image: "/images/alhikmah-1.jpg",
+    image: schoolImages[1],
     schoolSlug: "rsu",
-
   },
-]
+  {
+    id: "rivers-poly",
+    name: "Ken Saro-Wiwa Polytechnic",
+    shortName: "RIVERS POLY",
+    stateId: "rivers",
+    type: "polytechnic",
+    city: "Bori",
+    image: schoolImages[2],
+    schoolSlug: "rivers-poly",
+  },
+
+  // =====================
+  // SOKOTO STATE
+  // =====================
+  {
+    id: "udusok",
+    name: "Usmanu Danfodiyo University",
+    shortName: "UDUSOK",
+    stateId: "sokoto",
+    type: "university",
+    city: "Sokoto",
+    image: schoolImages[0],
+    schoolSlug: "udusok",
+  },
+  {
+    id: "ssu",
+    name: "Sokoto State University",
+    shortName: "SSU",
+    stateId: "sokoto",
+    type: "university",
+    city: "Sokoto",
+    image: schoolImages[1],
+    schoolSlug: "ssu",
+  },
+  {
+    id: "sokoto-poly",
+    name: "Federal Polytechnic Kaura Namoda",
+    shortName: "SOKOTO POLY",
+    stateId: "sokoto",
+    type: "polytechnic",
+    city: "Kaura Namoda",
+    image: schoolImages[2],
+    schoolSlug: "sokoto-poly",
+  },
+
+  // =====================
+  // TARABA STATE
+  // =====================
+  {
+    id: "tsu",
+    name: "Taraba State University",
+    shortName: "TSU",
+    stateId: "taraba",
+    type: "university",
+    city: "Jalingo",
+    image: schoolImages[0],
+    schoolSlug: "tsu",
+  },
+  {
+    id: "fuwukari",
+    name: "Federal University Wukari",
+    shortName: "FUWUKARI",
+    stateId: "taraba",
+    type: "university",
+    city: "Wukari",
+    image: schoolImages[1],
+    schoolSlug: "fuwukari",
+  },
+  {
+    id: "taraba-poly",
+    name: "Federal Polytechnic Bali",
+    shortName: "TARABA POLY",
+    stateId: "taraba",
+    type: "polytechnic",
+    city: "Bali",
+    image: schoolImages[2],
+    schoolSlug: "taraba-poly",
+  },
+
+  // =====================
+  // YOBE STATE
+  // =====================
+  {
+    id: "ysu",
+    name: "Yobe State University",
+    shortName: "YSU",
+    stateId: "yobe",
+    type: "university",
+    city: "Damaturu",
+    image: schoolImages[0],
+    schoolSlug: "ysu",
+  },
+  {
+    id: "fugusau",
+    name: "Federal University Gashua",
+    shortName: "FUGUSAU",
+    stateId: "yobe",
+    type: "university",
+    city: "Gashua",
+    image: schoolImages[1],
+    schoolSlug: "fugusau",
+  },
+  {
+    id: "yobe-poly",
+    name: "Federal Polytechnic Damaturu",
+    shortName: "YOBE POLY",
+    stateId: "yobe",
+    type: "polytechnic",
+    city: "Damaturu",
+    image: schoolImages[2],
+    schoolSlug: "yobe-poly",
+  },
+
+  // =====================
+  // ZAMFARA STATE
+  // =====================
+  {
+    id: "zsu",
+    name: "Zamfara State University",
+    shortName: "ZSU",
+    stateId: "zamfara",
+    type: "university",
+    city: "Talata Mafara",
+    image: schoolImages[0],
+    schoolSlug: "zsu",
+  },
+  {
+    id: "fugusau-zamfara",
+    name: "Federal University Gusau",
+    shortName: "FUGUS",
+    stateId: "zamfara",
+    type: "university",
+    city: "Gusau",
+    image: schoolImages[1],
+    schoolSlug: "fugus",
+  },
+  {
+    id: "zamfara-poly",
+    name: "Federal Polytechnic Kaura Namoda",
+    shortName: "ZAMFARA POLY",
+    stateId: "zamfara",
+    type: "polytechnic",
+    city: "Kaura Namoda",
+    image: schoolImages[2],
+    schoolSlug: "zamfara-poly",
+  },
+
+  // =====================
+  // FCT ABUJA
+  // =====================
+  {
+    id: "uniabuja",
+    name: "University of Abuja",
+    shortName: "UNIABUJA",
+    stateId: "abuja",
+    type: "university",
+    city: "Gwagwalada",
+    image: schoolImages[0],
+    schoolSlug: "uniabuja",
+  },
+  {
+    id: "nile",
+    name: "Nile University of Nigeria",
+    shortName: "NILE",
+    stateId: "abuja",
+    type: "university",
+    city: "Jabi",
+    image: schoolImages[1],
+    schoolSlug: "nile",
+  },
+  {
+    id: "abuja-poly",
+    name: "Federal Polytechnic Bwari",
+    shortName: "FCT POLY",
+    stateId: "abuja",
+    type: "polytechnic",
+    city: "Bwari",
+    image: schoolImages[2],
+    schoolSlug: "abuja-poly",
+  },
+];
 
 
 // export const hostels = [

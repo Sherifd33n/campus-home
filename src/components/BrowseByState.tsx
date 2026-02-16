@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -89,7 +89,7 @@ export default function StateSlider() {
             <Link
               href="/states"
               className="relative h-65 rounded-2xl flex items-center justify-center bg-[#278cf1] text-white text-xl font-semibold hover:bg-[#1f74cc] transition">
-              View All States →
+              View All States <FaArrowRight  className="ml-3"/>
             </Link>
           </SwiperSlide>
         </Swiper>

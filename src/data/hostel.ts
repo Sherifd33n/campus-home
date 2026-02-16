@@ -1,3 +1,17 @@
+const hostelImagePool = [
+    "/images/hostels/hostel1.png",
+    "/images/hostels/hostel2.png",
+    "/images/hostels/hostel3.png",
+    "/images/hostels/hostel4.png",
+    "/images/hostels/hostel5.png",
+];
+
+const getRandomImages = (count = 5) => {
+    const shuffled = [...hostelImagePool].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+};
+
+
 export const schoolHostels = [
     {
         id: "ng-1",
@@ -15,6 +29,7 @@ export const schoolHostels = [
         rating: 4.7,
         reviews: 214,
         startingPrice: 220000,
+        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
         amenities: ["WiFi", "24/7 Power", "Security", "Laundry", "Water Supply"],
         rooms: [
             { type: "Self-Contain", price: 350000, availability: "AVAILABLE" },
@@ -43,6 +58,7 @@ export const schoolHostels = [
         rating: 4.5,
         reviews: 178,
         startingPrice: 180000,
+        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
         amenities: ["WiFi", "Security", "Study Room", "Water Supply"],
         rooms: [
             { type: "Single Room", price: 250000, availability: "AVAILABLE" },
@@ -71,6 +87,7 @@ export const schoolHostels = [
         rating: 4.2,
         reviews: 96,
         startingPrice: 150000,
+        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
         amenities: ["Water Supply", "Security", "Generator"],
         rooms: [
             { type: "Single Room", price: 200000, availability: "LIMITED" },
@@ -99,6 +116,7 @@ export const schoolHostels = [
         rating: 4.6,
         reviews: 260,
         startingPrice: 200000,
+        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
         amenities: ["WiFi", "24/7 Power", "CCTV", "Laundry"],
         rooms: [
             { type: "Self-Contain", price: 320000, availability: "AVAILABLE" },
@@ -127,6 +145,7 @@ export const schoolHostels = [
         rating: 4.4,
         reviews: 143,
         startingPrice: 170000,
+        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
         amenities: ["Water Supply", "Security", "WiFi"],
         rooms: [
             { type: "Single Room", price: 240000, availability: "AVAILABLE" },
@@ -178,6 +197,7 @@ export const schoolHostels = [
         rating: 4 + (i % 5) * 0.1,
         reviews: 50 + i * 7,
         startingPrice: 120000 + i * 5000,
+        images: getRandomImages(),
         amenities: ["Security", "Water Supply", "WiFi"],
         rooms: [
             {
