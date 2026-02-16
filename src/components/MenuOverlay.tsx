@@ -1,10 +1,56 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Overlay from "../../public/images/menu.jpg";
 import Image from "next/image";
 import { FaGraduationCap } from "react-icons/fa";
 import { IoBedSharp, IoPricetags, IoSearchSharp } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+import { institutions } from "@/data/listing";
+import { roomTypes } from "@/data/hostel";
 
 const MenuOverlay = () => {
+  const router = useRouter();
+  const [university, setUniversity] = useState("");
+  const [budget, setBudget] = useState("");
+  const [roomType, setRoomType] = useState(roomTypes[0].type);
+  const [error, setError] = useState("");
+
+  const handleSearch = () => {
+    // Clear previous errors
+    setError("");
+
+    // Validate university input
+    if (!university.trim()) {
+      setError("Please enter a university name");
+      return;
+    }
+
+    // Find matching institution (case-insensitive search by name or shortName)
+    const matchedInstitution = institutions.find(
+      (inst) =>
+        inst.name.toLowerCase().includes(university.toLowerCase()) ||
+        inst.shortName.toLowerCase().includes(university.toLowerCase()),
+    );
+
+    if (!matchedInstitution) {
+      setError("University not found. Please check the name and try again.");
+      return;
+    }
+
+    // Construct URL with search params
+    const params = new URLSearchParams();
+    if (budget) params.append("budget", budget);
+    if (roomType) params.append("roomType", roomType);
+
+    const url = `/states/${matchedInstitution.stateId}/${matchedInstitution.schoolSlug}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+
+    // Navigate to school page
+    router.push(url);
+  };
+
   return (
     <div>
       {" "}
@@ -19,8 +65,9 @@ const MenuOverlay = () => {
         <div className="absolute inset-0 bg-black/80" />
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
-
-          <p className="uppercase text-[10px] font-semibold border border-gray-100 text-gray-100 py-1 px-4 rounded-full bg-[#595754] mb-4">over 1,000+ verified listings</p>
+          <p className="uppercase text-[10px] font-semibold border border-gray-100 text-gray-100 py-1 px-4 rounded-full bg-[#595754] mb-4">
+            over 1,000+ verified listings
+          </p>
 
           <h1 className="text-4xl md:text-5xl font-semibold mx-[20%]">
             Find Your Perfect <span className="text-[#278cf1]">Home</span> Near
@@ -32,6 +79,12 @@ const MenuOverlay = () => {
             Secure your space for the upcoming session.
           </p>
 
+          {error && (
+            <p className="mt-4 text-red-400 text-sm bg-red-900/30 px-4 py-2 rounded-md">
+              {error}
+            </p>
+          )}
+
           <div className="mt-6 bg-white px-4 py-3 rounded-2xl flex items-center justify-between gap-7">
             <div className="flex items-center gap-2">
               <FaGraduationCap size={20} className="text-[#278cf1]" />
@@ -41,8 +94,10 @@ const MenuOverlay = () => {
                 </p>
                 <input
                   type="search"
-                  placeholder="e.g . University of Ilorin"
+                  placeholder="e.g. University of Ilorin"
                   className="text-gray-700 text-sm outline-none"
+                  value={university}
+                  onChange={(e) => setUniversity(e.target.value)}
                 />
               </div>
             </div>
@@ -55,21 +110,13 @@ const MenuOverlay = () => {
                 <p className="text-[10px] font-semibold text-gray-600">
                   BUDGET
                 </p>
-                <select className="text-gray-600 outline-none font-semibold text-sm">
-                  <option value={50 - 100} className="">
-                    #50,000 - #100,000
-                  </option>
-                  <option value={50 - 100}>#101,000 - #200,000</option>
-
-                  <option value={50 - 100}>#201,000 - #300,000</option>
-
-                  <option value={50 - 100}>#301,000 - #400,000</option>
-
-                  <option value={50 - 100}>#401,000 - #500,000</option>
-
-                  <option value={50 - 100}>#501,000 - #900,000</option>
-                  <option value={50 - 100}>#900,000+</option>
-                </select>
+                <input
+                  type="number"
+                  placeholder="e.g. 150000"
+                  className="text-gray-700 text-sm outline-none"
+                  value={budget}
+                  onChange={(e) => setBudget(e.target.value)}
+                />
               </div>
             </div>
 
@@ -81,26 +128,22 @@ const MenuOverlay = () => {
                 <p className="text-[10px] font-semibold text-gray-600">
                   ROOM TYPE
                 </p>
-                <select className="text-gray-600 outline-none font-semibold text-sm">
-                  <option value={"single-room"} className="">
-                    Single Room
-                  </option>
-                  <option value={"room-and-parlour"}>Room and Parlour</option>
-
-                  <option value={"2-bedroom"}>2 Bedroom</option>
-
-                  <option value={"3-bedroom"}>3 Bedroom</option>
-
-                  <option value={"room-selfcon"}>Room Selfcon</option>
-
-                  <option value={"room-parlour-selfcon"}>
-                    Room and Parlour Selfcon
-                  </option>
+                <select
+                  className="text-gray-600 outline-none font-semibold text-sm"
+                  value={roomType}
+                  onChange={(e) => setRoomType(e.target.value)}>
+                  {roomTypes.map((room) => (
+                    <option key={room.type} value={room.type}>
+                      {room.type}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            <button className="flex items-center gap-1 bg-[#278cf1] py-3 px-4 rounded-md text-sm cursor-pointer hover:opacity-60 duration-150">
+            <button
+              className="flex items-center gap-1 bg-[#278cf1] py-3 px-4 rounded-md text-sm cursor-pointer hover:opacity-60 duration-150"
+              onClick={handleSearch}>
               <IoSearchSharp size={18} />
               Search
             </button>

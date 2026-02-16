@@ -1,3 +1,4 @@
+// Hostel data generation with compact code
 const hostelImagePool = [
     "/images/hostels/hostel1.png",
     "/images/hostels/hostel2.png",
@@ -6,227 +7,188 @@ const hostelImagePool = [
     "/images/hostels/hostel5.png",
 ];
 
-const getRandomImages = (count = 5) => {
-    const shuffled = [...hostelImagePool].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+const hostelNames = [
+    "Premier Lodge", "Royal Residence", "Campus Haven", "Scholar's Nest",
+    "Elite Hostel", "Green Park Lodge", "Victory Hostel", "Golden Gate Residence",
+    "Comfort Zone", "Paradise Lodge", "Excellence Hostel", "Summit Residence",
+    "Crown Plaza", "Diamond Lodge", "Prestige Hostel", "Heritage Residence",
+    "Harmony Lodge", "Serenity Hostel", "Oasis Residence", "Pinnacle Lodge"
+];
+
+export const roomTypes = [
+    { type: "Single Room", basePrice: 250000 },
+    { type: "Self-Contain", basePrice: 350000 },
+    { type: "2-Bed Shared", basePrice: 200000 },
+    { type: "3-Bed Shared", basePrice: 150000 },
+    { type: "4-Bed Dorm", basePrice: 120000 },
+    { type: "Room Selfcon", basePrice: 300000 },
+    { type: "Room and Parlour", basePrice: 400000 },
+    { type: "2 Bedroom", basePrice: 500000 },
+    { type: "3 Bedroom", basePrice: 650000 },
+    { type: "Room and Parlour Selfcon", basePrice: 450000 }
+];
+
+const amenitiesPool = [
+    "WiFi", "24/7 Power", "Security", "CCTV", "Laundry", "Water Supply",
+    "Generator", "Study Room", "Parking", "Kitchen", "Gym", "Swimming Pool"
+];
+
+const streets = [
+    "University Road", "Campus Avenue", "Scholar Street", "Education Drive",
+    "College Road", "Academic Way", "Student Lane", "Learning Boulevard",
+    "Knowledge Street", "Wisdom Avenue", "Main Campus Road", "North Gate Road",
+    "South Gate Avenue", "East Campus Drive", "West Campus Street"
+];
+
+const genderOptions = ["Mixed", "Male Only", "Female Only"];
+
+const schoolSlugs = [
+    "absu", "mouau", "abia-poly", "mautech", "adsu", "adamawa-poly",
+    "uniuyo", "aksu", "akwa-ibom-poly", "unizik", "coou", "anambra-poly",
+    "atbu", "basu", "bauchi-poly", "ndu", "bayelsa-medical", "bayelsa-poly",
+    "bsu", "uam", "benue-poly", "unimaid", "basu-borno", "borno-poly",
+    "unical", "crutech", "cross-river-poly", "delsu", "fupre", "delta-poly",
+    "ebsu", "funai", "ebonyi-poly", "uniben", "aau", "edo-poly",
+    "eksu", "fuoye", "ekiti-poly", "unn", "esut", "enugu-poly",
+    "gsu", "fuk", "gombe-poly", "imsu", "futo", "imo-poly",
+    "fud", "jigsu", "jigawa-poly", "abu", "kasu", "kadpoly",
+    "buk", "kust", "kano-poly", "fudma", "umyu", "katsina-poly",
+    "fubk", "ksusta", "kebbi-poly", "ksu", "ful", "kogi-poly",
+    "unilorin", "kwasu", "offa-poly", "unilag", "lasu", "lagos-poly",
+    "fulafia", "nsuk", "nasarawa-poly", "futminna", "ibbul", "niger-poly",
+    "funaab", "oou", "ogun-poly", "futa", "adekunle-ajasin", "ondo-poly",
+    "uniosun", "oau", "osun-poly", "ui", "lautech", "oyo-poly",
+    "unijos", "plasu", "plateau-poly", "uniport", "rsu", "rivers-poly",
+    "udusok", "sokoto-state", "sokoto-poly", "futa-taraba", "taraba-state", "taraba-poly",
+    "ysu", "fuy", "yobe-poly", "fudz", "zamfara-state", "zamfara-poly",
+    "uniabuja", "baze", "abuja-poly"
+];
+
+// TypeScript interface for Hostel data
+interface Hostel {
+    id: string;
+    slug: string;
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    distanceToCampus: string;
+    verified: boolean;
+    gender: string;
+    totalUnits: number;
+    schoolSlug: string;
+    rating: number;
+    reviews: number;
+    startingPrice: number;
+    images: string[];
+    amenities: string[];
+    rooms: {
+        type: string;
+        price: number;
+        availability: string;
+    }[];
+    utilitiesIncluded: boolean;
+    refundableDeposit: boolean;
+    noHiddenFees: boolean;
+    featured: boolean;
+    createdAt: string;
+}
+
+// Seeded random number generator for consistent results
+class SeededRandom {
+    constructor(seed: number) {
+        this.seed = seed;
+    }
+    seed: number;
+
+    next() {
+        this.seed = (this.seed * 9301 + 49297) % 233280;
+        return this.seed / 233280;
+    }
+
+    nextInt(min: number, max: number) {
+        return Math.floor(this.next() * (max - min + 1)) + min;
+    }
+
+    choice<T>(arr: T[]): T {
+        return arr[this.nextInt(0, arr.length - 1)];
+    }
+
+    shuffle<T>(arr: T[]): T[] {
+        const result = [...arr];
+        for (let i = result.length - 1; i > 0; i--) {
+            const j = this.nextInt(0, i);
+            [result[i], result[j]] = [result[j], result[i]];
+        }
+        return result;
+    }
+}
+
+// Generate hostels with seeded randomness for consistency
+const generateHostels = () => {
+    const hostels: Hostel[] = [];
+    let hostelId = 1;
+
+    schoolSlugs.forEach((slug, schoolIndex) => {
+        const rng = new SeededRandom(schoolIndex * 1000);
+        const numHostels = rng.nextInt(5, 6);
+
+        for (let i = 0; i < numHostels; i++) {
+            const itemRng = new SeededRandom(schoolIndex * 1000 + i * 100);
+
+            // Generate room types
+            const numRoomTypes = itemRng.nextInt(2, 4);
+            const selectedRoomTypes = itemRng.shuffle(roomTypes).slice(0, numRoomTypes);
+            const rooms = selectedRoomTypes.map(room => ({
+                type: room.type,
+                price: room.basePrice + (itemRng.nextInt(-5, 5) * 10000),
+                availability: itemRng.next() > 0.7 ? "LIMITED" : "AVAILABLE"
+            }));
+
+            const startingPrice = Math.min(...rooms.map(r => r.price));
+
+            // Generate amenities
+            const numAmenities = itemRng.nextInt(4, 7);
+            const amenities = itemRng.shuffle(amenitiesPool).slice(0, numAmenities);
+
+            // Generate images
+            const images = itemRng.shuffle(hostelImagePool);
+
+            const hostelName = hostelNames[(schoolIndex * numHostels + i) % hostelNames.length];
+            const street = streets[(schoolIndex * numHostels + i) % streets.length];
+
+            hostels.push({
+                id: `ng-${hostelId}`,
+                slug: `${slug}-${hostelName.toLowerCase().replace(/['\s]/g, '-')}-${i + 1}`,
+                name: hostelName,
+                address: `${itemRng.nextInt(1, 50)} ${street}`,
+                city: "Campus Area",
+                state: "Nigeria",
+                country: "Nigeria",
+                distanceToCampus: `${itemRng.nextInt(2, 13)} mins walk to campus`,
+                verified: itemRng.next() > 0.3,
+                gender: itemRng.choice(genderOptions),
+                totalUnits: itemRng.nextInt(40, 100),
+                schoolSlug: slug,
+                rating: parseFloat((3.8 + itemRng.next() * 1.2).toFixed(1)),
+                reviews: itemRng.nextInt(50, 350),
+                startingPrice,
+                images,
+                amenities,
+                rooms,
+                utilitiesIncluded: itemRng.next() > 0.7,
+                refundableDeposit: itemRng.next() > 0.2,
+                noHiddenFees: itemRng.next() > 0.3,
+                featured: itemRng.next() > 0.85,
+                createdAt: `2025-${String(itemRng.nextInt(1, 2)).padStart(2, '0')}-${String(itemRng.nextInt(1, 28)).padStart(2, '0')}`
+            });
+
+            hostelId++;
+        }
+    });
+
+    return hostels;
 };
 
-
-export const schoolHostels = [
-    {
-        id: "ng-1",
-        slug: "unilag-premier-lodge",
-        name: "UNILAG Premier Lodge",
-        address: "15 University Road",
-        city: "Akoka",
-        state: "Lagos",
-        country: "Nigeria",
-        distanceToCampus: "4 mins walk to UNILAG",
-        verified: true,
-        gender: "Mixed",
-        totalUnits: 75,
-        schoolSlug: "unilag",
-        rating: 4.7,
-        reviews: 214,
-        startingPrice: 220000,
-        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
-        amenities: ["WiFi", "24/7 Power", "Security", "Laundry", "Water Supply"],
-        rooms: [
-            { type: "Self-Contain", price: 350000, availability: "AVAILABLE" },
-            { type: "2-Bed Shared", price: 220000, availability: "LIMITED" },
-        ],
-        utilitiesIncluded: false,
-        refundableDeposit: true,
-        noHiddenFees: true,
-        featured: true,
-        createdAt: "2025-01-12",
-    },
-
-    {
-        id: "ng-2",
-        slug: "ui-scholar-residence",
-        name: "UI Scholar Residence",
-        address: "2 Agbowo Road",
-        city: "Ibadan",
-        state: "Oyo",
-        country: "Nigeria",
-        distanceToCampus: "6 mins walk to UI",
-        verified: true,
-        gender: "Mixed",
-        schoolSlug: "ui",
-        totalUnits: 60,
-        rating: 4.5,
-        reviews: 178,
-        startingPrice: 180000,
-        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
-        amenities: ["WiFi", "Security", "Study Room", "Water Supply"],
-        rooms: [
-            { type: "Single Room", price: 250000, availability: "AVAILABLE" },
-            { type: "4-Bed Dorm", price: 180000, availability: "AVAILABLE" },
-        ],
-        utilitiesIncluded: false,
-        refundableDeposit: true,
-        noHiddenFees: true,
-        featured: false,
-        createdAt: "2025-02-03",
-    },
-
-    {
-        id: "ng-3",
-        slug: "abu-zaria-campus-haven",
-        name: "ABU Campus Haven",
-        address: "12 Samaru Street",
-        city: "Zaria",
-        state: "Kaduna",
-        schoolSlug: "abu",
-        country: "Nigeria",
-        distanceToCampus: "8 mins walk to ABU",
-        verified: false,
-        gender: "Male Only",
-        totalUnits: 50,
-        rating: 4.2,
-        reviews: 96,
-        startingPrice: 150000,
-        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
-        amenities: ["Water Supply", "Security", "Generator"],
-        rooms: [
-            { type: "Single Room", price: 200000, availability: "LIMITED" },
-            { type: "3-Bed Shared", price: 150000, availability: "AVAILABLE" },
-        ],
-        utilitiesIncluded: false,
-        refundableDeposit: true,
-        noHiddenFees: true,
-        featured: false,
-        createdAt: "2025-01-25",
-    },
-
-    {
-        id: "ng-4",
-        slug: "lasu-royal-hostel",
-        name: "LASU Royal Hostel",
-        address: "Okokomaiko Road",
-        city: "Ojo",
-        state: "Lagos",
-        schoolSlug: "lasu",
-        country: "Nigeria",
-        distanceToCampus: "5 mins walk to LASU",
-        verified: true,
-        gender: "Mixed",
-        totalUnits: 90,
-        rating: 4.6,
-        reviews: 260,
-        startingPrice: 200000,
-        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
-        amenities: ["WiFi", "24/7 Power", "CCTV", "Laundry"],
-        rooms: [
-            { type: "Self-Contain", price: 320000, availability: "AVAILABLE" },
-            { type: "4-Bed Dorm", price: 200000, availability: "AVAILABLE" },
-        ],
-        utilitiesIncluded: true,
-        refundableDeposit: true,
-        noHiddenFees: true,
-        featured: true,
-        createdAt: "2025-01-18",
-    },
-
-    {
-        id: "ng-5",
-        slug: "futa-green-residence",
-        name: "FUTA Green Residence",
-        address: "Opposite South Gate",
-        city: "Akure",
-        state: "Ondo",
-        country: "Nigeria",
-        schoolSlug: "futa",
-        distanceToCampus: "3 mins walk to FUTA",
-        verified: true,
-        gender: "Mixed",
-        totalUnits: 55,
-        rating: 4.4,
-        reviews: 143,
-        startingPrice: 170000,
-        images: ["/images/hostels/hostel1.png", "/images/hostels/hostel2.png", "/images/hostels/hostel3.png", "/images/hostels/hostel4.png", "/images/hostels/hostel5.png"],
-        amenities: ["Water Supply", "Security", "WiFi"],
-        rooms: [
-            { type: "Single Room", price: 240000, availability: "AVAILABLE" },
-            { type: "2-Bed Shared", price: 170000, availability: "LIMITED" },
-        ],
-        utilitiesIncluded: false,
-        refundableDeposit: true,
-        noHiddenFees: true,
-        featured: false,
-        createdAt: "2025-02-01",
-    },
-
-    // ---------- AUTO-GENERATED VARIATIONS BELOW ----------
-
-    ...Array.from({ length: 25 }).map((_, i) => ({
-        id: `ng-auto-${i + 6}`,
-        slug: `campus-hostel-${i + 6}`,
-        name: `Campus Comfort Lodge ${i + 6}`,
-        address: `${10 + i} University Street`,
-        city: [
-            "Ilorin",
-            "Nsukka",
-            "Benin City",
-            "Enugu",
-            "Owerri",
-            "Port Harcourt",
-            "Abeokuta",
-            "Minna",
-            "Uyo",
-            "Jos",
-        ][i % 10],
-        state: [
-            "Kwara",
-            "Enugu",
-            "Edo",
-            "Enugu",
-            "Imo",
-            "Rivers",
-            "Ogun",
-            "Niger",
-            "Akwa Ibom",
-            "Plateau",
-        ][i % 10],
-        country: "Nigeria",
-        distanceToCampus: `${3 + (i % 6)} mins walk to campus`,
-        verified: i % 2 === 0,
-        gender: i % 3 === 0 ? "Female Only" : "Mixed",
-        totalUnits: 40 + i,
-        rating: 4 + (i % 5) * 0.1,
-        reviews: 50 + i * 7,
-        startingPrice: 120000 + i * 5000,
-        images: getRandomImages(),
-        amenities: ["Security", "Water Supply", "WiFi"],
-        rooms: [
-            {
-                type: "Single Room",
-                price: 180000 + i * 4000,
-                availability: "AVAILABLE",
-            },
-            {
-                type: "4-Bed Dorm",
-                price: 120000 + i * 3000,
-                availability: i % 4 === 0 ? "LIMITED" : "AVAILABLE",
-            },
-        ],
-        schoolSlug: [
-            "unilorin",
-            "unn",
-            "uniben",
-            "esut",
-            "futo",
-            "uniport",
-            "funab",
-            "futminna",
-            "uniuyo",
-            "unijos",
-        ][i % 10],
-        utilitiesIncluded: false,
-        refundableDeposit: true,
-        noHiddenFees: true,
-        featured: i % 7 === 0,
-        createdAt: "2025-02-10",
-    })),
-];
+export const schoolHostels = generateHostels();

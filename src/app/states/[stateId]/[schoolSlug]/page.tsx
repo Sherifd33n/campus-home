@@ -10,10 +10,12 @@ import Container from "@/components/Container";
 
 interface Props {
   params: { stateId: string; schoolSlug: string };
+  searchParams?: { budget?: string; roomType?: string };
 }
 
-export default async function SchoolPage({ params }: Props) {
+export default async function SchoolPage({ params, searchParams }: Props) {
   const { stateId, schoolSlug } = await params;
+  const resolvedSearchParams = await searchParams;
 
   if (!stateId || !schoolSlug) {
     return <div className="p-10">Invalid URL parameters</div>;
@@ -31,9 +33,32 @@ export default async function SchoolPage({ params }: Props) {
   const state = states.find((s) => s.id === stateId);
 
   // Filter hostels by schoolSlug
-  const schoolHostelsList = schoolHostels.filter(
+  let schoolHostelsList = schoolHostels.filter(
     (hostel) => hostel.schoolSlug?.toLowerCase() === schoolSlug.toLowerCase(),
   );
+
+  // Apply filters from search params
+  const budget = resolvedSearchParams?.budget;
+  const roomType = resolvedSearchParams?.roomType;
+
+  if (budget) {
+    const budgetNum = parseFloat(budget);
+    schoolHostelsList = schoolHostelsList.filter((hostel) =>
+      hostel.rooms.some((room) => room.price <= budgetNum),
+    );
+  }
+
+  if (roomType) {
+    const normalizedTarget = roomType.toLowerCase().replace(/-/g, " ");
+    schoolHostelsList = schoolHostelsList.filter((hostel) =>
+      hostel.rooms.some(
+        (room) =>
+          room.type.toLowerCase().replace(/-/g, " ") === normalizedTarget,
+      ),
+    );
+  }
+
+  const hasFilters = budget || roomType;
 
   // Get all other schools in the same state (excluding current school)
   const otherSchools = institutions.filter(
@@ -65,6 +90,31 @@ export default async function SchoolPage({ params }: Props) {
           {school.city}, {state?.name}
         </p>
 
+        {/* Filter Indicator */}
+        {hasFilters && (
+          <div className="mt-4 flex items-center gap-3 flex-wrap">
+            <p className="text-sm text-gray-600">Active filters:</p>
+            {budget && (
+              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+                Budget: ≤ ₦{parseFloat(budget).toLocaleString()}
+              </span>
+            )}
+            {roomType && (
+              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+                Room Type:{" "}
+                {roomType
+                  .replace(/-/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+              </span>
+            )}
+            <Link
+              href={`/states/${stateId}/${schoolSlug}`}
+              className="text-sm px-2 py-1 text-red-600 hover:text-red-700 bg-red-200 rounded-full">
+              Clear filters
+            </Link>
+          </div>
+        )}
+
         {/* Hostels Section */}
         <div className="mt-10">
           <h2 className="text-2xl font-semibold text-[#0f172a] mb-5">
@@ -79,7 +129,7 @@ export default async function SchoolPage({ params }: Props) {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {schoolHostelsList.map((hostel) => (
                 <HostelCard key={hostel.id} hostel={hostel} />
               ))}
