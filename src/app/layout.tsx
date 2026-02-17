@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
-export const metadata: Metadata = {
-  title: "Campus Home",
-  description:
-    "Find your perfect stay with Stay Find - the ultimate accommodation search platform.",
-};
-
-import { Outfit } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
+
+import LayoutWrapper from "@/components/LayoutWrapper";
+import { FavoriteProvider } from "@/context/FavoriteContext";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -20,7 +14,11 @@ const outfit = Outfit({
   display: "swap",
 });
 
-import { FavoriteProvider } from "@/context/FavoriteContext";
+export const metadata: Metadata = {
+  title: "Campus Home",
+  description:
+    "Find your perfect stay with Campus Home - the ultimate student accommodation search platform.",
+};
 
 export default function RootLayout({
   children,
@@ -31,10 +29,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.className} antialiased`}>
         <FavoriteProvider>
-          <Navbar />
-          {children}
+          <LayoutWrapper>{children}</LayoutWrapper>
+
+          {/* Toast Notifications */}
           <Toaster position="top-center" richColors />
-          <Footer />
           <ToastContainer position="top-right" />
         </FavoriteProvider>
       </body>

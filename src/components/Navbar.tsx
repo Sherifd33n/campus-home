@@ -27,7 +27,10 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link href="/" className="hover:text-gray-500 duration-150">
+            <Link
+              href="/register/agent"
+              onClick={() => console.log("Become an Agent link clicked")}
+              className="hover:text-gray-500 duration-150">
               Become an Agent
             </Link>
           </li>

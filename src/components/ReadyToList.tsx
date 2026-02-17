@@ -1,6 +1,7 @@
 import React from "react";
 import Container from "./Container";
 import { IoTime, IoTrendingUpSharp } from "react-icons/io5";
+import Link from "next/link";
 
 const ReadyToList = () => {
   return (
@@ -15,9 +16,11 @@ const ReadyToList = () => {
             with CampusHome.
           </p>
           <div className="flex gap-3 items-center">
-            <button className="text-white border-[#278cf1] bg-[#278cf1] text-sm px-4 py-2 rounded-md cursor-pointer hover:opacity-60 duration-200">
+            <Link
+              href="/register/agent"
+              className="text-white border-[#278cf1] bg-[#278cf1] text-sm px-4 py-2 rounded-md cursor-pointer hover:opacity-60 duration-200">
               Become an Agent
-            </button>
+            </Link>
             <button className="bg-[#252b33] text-white border border-[#373c42] text-sm px-5 py-2 rounded-md cursor-pointer hover:opacity-60 duration-200">
               Learn More
             </button>

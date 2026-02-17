@@ -30,7 +30,7 @@ const Footer = () => {
             </li>
 
             <li>
-              <Link href="" className="hover:text-[#0d141c]">
+              <Link href="/register/agent" className="hover:text-[#0d141c]">
                 Agent Portal
               </Link>
             </li>
@@ -96,22 +96,30 @@ const Footer = () => {
           <ul className="flex gap-5 duration-200 transition-all">
             <li>
               {" "}
-              <Link href="" className="hover:text-gray-800">FACEBOOK</Link>
+              <Link href="" className="hover:text-gray-800">
+                FACEBOOK
+              </Link>
             </li>
 
             <li>
               {" "}
-              <Link href="" className="hover:text-gray-800">TWITTER</Link>
+              <Link href="" className="hover:text-gray-800">
+                TWITTER
+              </Link>
             </li>
 
             <li>
               {" "}
-              <Link href="" className="hover:text-gray-800">INSTAGRAM</Link>
+              <Link href="" className="hover:text-gray-800">
+                INSTAGRAM
+              </Link>
             </li>
 
             <li>
               {" "}
-              <Link href="" className="hover:text-gray-800">LINKEDIN</Link>
+              <Link href="" className="hover:text-gray-800">
+                LINKEDIN
+              </Link>
             </li>
           </ul>
         </div>
