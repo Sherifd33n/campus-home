@@ -1,4 +1,4 @@
-import { Institution } from "../../.next/types/listing";
+import { Institution } from "../types/listing";
 
 export const nigeriaStates = [
   "abia", "adamawa", "akwa-ibom", "anambra", "bauchi", "bayelsa", "benue", "borno",

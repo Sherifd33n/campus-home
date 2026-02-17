@@ -20,6 +20,8 @@ const outfit = Outfit({
   display: "swap",
 });
 
+import { FavoriteProvider } from "@/context/FavoriteContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,12 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.className} antialiased`}>
-        {" "}
-        <Navbar />
-        {children}
-        <Toaster position="top-center" richColors />
-        <Footer />
-        <ToastContainer position="top-right" />
+        <FavoriteProvider>
+          <Navbar />
+          {children}
+          <Toaster position="top-center" richColors />
+          <Footer />
+          <ToastContainer position="top-right" />
+        </FavoriteProvider>
       </body>
     </html>
   );

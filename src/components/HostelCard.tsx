@@ -1,7 +1,7 @@
-// components/HostelCard.tsx
 "use client";
 
-import { useState } from "react";
+// components/HostelCard.tsx
+import { useFavorites } from "@/context/FavoriteContext";
 import { FaHeart, FaRegHeart, FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,38 +36,16 @@ export default function HostelCard({
   hostel,
   onFavoriteChange,
 }: HostelCardProps) {
-  const [isFavorite, setIsFavorite] = useState(() => {
-    if (typeof window !== "undefined") {
-      const favorites = JSON.parse(
-        localStorage.getItem("favoriteHostels") || "[]",
-      );
-      return favorites.includes(hostel.id);
-    }
-    return false;
-  });
+  const { favoriteIds, toggleFavorite } = useFavorites();
+  const favorited = favoriteIds.includes(hostel.id);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    toggleFavorite(hostel.id);
 
-    const favorites = JSON.parse(
-      localStorage.getItem("favoriteHostels") || "[]",
-    );
-
-    if (!isFavorite) {
-      favorites.push(hostel.id);
-      localStorage.setItem("favoriteHostels", JSON.stringify(favorites));
-      setIsFavorite(true);
-    } else {
-      const filtered = favorites.filter((id: string) => id !== hostel.id);
-      localStorage.setItem("favoriteHostels", JSON.stringify(filtered));
-      setIsFavorite(false);
-
-      // Trigger callback if provided (for favorites page to refresh)
-      if (onFavoriteChange) {
-        onFavoriteChange();
-      }
-    }
+    // Trigger callback if provided (for favorites page to refresh if needed)
+    onFavoriteChange?.();
   };
 
   return (
@@ -86,12 +64,16 @@ export default function HostelCard({
         {/* Favorite Button */}
         <button
           onClick={handleFavoriteClick}
-          className="absolute top-3 right-3 bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition z-10"
+          className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition z-10 cursor-pointer ${
+            favorited
+              ? "bg-red-50 text-red-500"
+              : "bg-white/90 hover:bg-white text-gray-600"
+          }`}
           aria-label="Add to favorites">
-          {isFavorite ? (
-            <FaHeart className="text-red-500 text-lg" />
+          {favorited ? (
+            <FaHeart className="text-lg" />
           ) : (
-            <FaRegHeart className="text-gray-600 text-lg" />
+            <FaRegHeart className="text-lg" />
           )}
         </button>
       </div>

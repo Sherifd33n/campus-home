@@ -109,7 +109,7 @@ export default async function SchoolPage({ params, searchParams }: Props) {
             )}
             <Link
               href={`/states/${stateId}/${schoolSlug}`}
-              className="text-sm px-2 py-1 text-red-600 hover:text-red-700 bg-red-200 rounded-full">
+              className="text-sm px-3 py-1 text-red-600 hover:text-red-700 bg-red-200 rounded-full">
               Clear filters
             </Link>
           </div>

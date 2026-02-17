@@ -1,17 +1,29 @@
+"use client";
+
 import React from "react";
 import Logo from "./Logo";
 import Link from "next/link";
 import Container from "./Container";
+import { useFavorites } from "@/context/FavoriteContext";
 
 const Navbar = () => {
+  const { favoriteIds } = useFavorites();
+
   return (
-    <div className=" z-50 sticky top-0 bg-[#feffff]">
+    <div className="z-50 sticky top-0 bg-[#feffff]">
       <Container className="py-4 flex items-center justify-between">
         <Logo />
-        <ul className="flex items-center gap-8">
+        <ul className="flex items-center gap-12">
           <li>
-            <Link href="/favorite" className="hover:text-gray-500 duration-150">
+            <Link
+              href="/favorite"
+              className="hover:text-gray-500 duration-150 flex items-center gap-1.5 relative">
               Favorite
+              {favoriteIds.length > 0 && (
+                <span className="bg-[#278cf1] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full absolute top-0 -right-4">
+                  {favoriteIds.length}
+                </span>
+              )}
             </Link>
           </li>
           <li>

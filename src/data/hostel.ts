@@ -65,7 +65,7 @@ const schoolSlugs = [
 ];
 
 // TypeScript interface for Hostel data
-interface Hostel {
+export interface Hostel {
     id: string;
     slug: string;
     name: string;
@@ -92,6 +92,7 @@ interface Hostel {
     refundableDeposit: boolean;
     noHiddenFees: boolean;
     featured: boolean;
+    about: string;
     createdAt: string;
 }
 
@@ -181,6 +182,7 @@ const generateHostels = () => {
                 refundableDeposit: itemRng.next() > 0.2,
                 noHiddenFees: itemRng.next() > 0.3,
                 featured: itemRng.next() > 0.85,
+                about: `Welcome to ${hostelName}, a premium student residence located just ${itemRng.nextInt(2, 13)} minutes from campus. This hostel offers a perfect blend of comfort, security, and convenience for serious students. Our facilities are well-maintained and designed to provide a conducive environment for both academic excellence and social interaction. With amenities like ${amenities.join(", ")}, we ensure that your stay is comfortable and hassle-free. The rooms are spacious, well-ventilated, and come with modern fittings. At ${hostelName}, we prioritize your safety with 24/7 security measures and a friendly management team always ready to assist you in making your campus life memorable.`,
                 createdAt: `2025-${String(itemRng.nextInt(1, 2)).padStart(2, '0')}-${String(itemRng.nextInt(1, 28)).padStart(2, '0')}`
             });
 
