@@ -1,5 +1,5 @@
 import React from "react";
-import { IoAdd, IoEye, IoPencil, IoTrash } from "react-icons/io5";
+import { IoAdd, IoEye, IoPencil, IoTrash, IoRocket } from "react-icons/io5";
 import { Listing } from "../types";
 
 interface ListingsTabProps {
@@ -99,6 +99,7 @@ const ListingsTab: React.FC<ListingsTabProps> = ({
                           setViewingProperty(listing);
                           setIsViewModalOpen(true);
                         }}
+                        title="View Details"
                         className="p-2 hover:bg-blue-50 rounded-lg text-blue-600 transition-colors">
                         <IoEye />
                       </button>
@@ -107,11 +108,21 @@ const ListingsTab: React.FC<ListingsTabProps> = ({
                           setEditingProperty(listing);
                           setIsPropertyModalOpen(true);
                         }}
+                        title="Edit Listing"
                         className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
                         <IoPencil />
                       </button>
                       <button
+                        onClick={() => {
+                          // Handle Boost logic here
+                        }}
+                        title="Boost Listing"
+                        className="p-2 hover:bg-amber-50 rounded-lg text-amber-500 transition-colors">
+                        <IoRocket />
+                      </button>
+                      <button
                         onClick={() => handleDelete(listing.id)}
+                        title="Delete Listing"
                         className="p-2 hover:bg-red-50 rounded-lg text-red-600 transition-colors">
                         <IoTrash />
                       </button>

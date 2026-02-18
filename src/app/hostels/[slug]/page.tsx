@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa6";
 import { FaBath } from "react-icons/fa";
 import { MdOutlineKitchen, MdVerified } from "react-icons/md";
+import ReviewsSection from "@/components/ReviewsSection";
 
 interface Props {
   params: { slug: string };
@@ -129,7 +130,6 @@ export default async function HostelDetailsPage({ params }: Props) {
                 </div>
               </div>
             </div>
-
             {/* About Section */}
             <div className="">
               <h2 className="text-xl font-bold text-[#0f172a] mb-4 flex items-center gap-2">
@@ -139,7 +139,6 @@ export default async function HostelDetailsPage({ params }: Props) {
                 {hostel.about}
               </p>
             </div>
-
             {/* Room Types */}
             <div className="">
               <h2 className="text-xl font-bold text-[#0f172a] mb-4">
@@ -191,7 +190,6 @@ export default async function HostelDetailsPage({ params }: Props) {
                 </div>
               </div>
             </div>
-
             {/* Amenities Grid */}
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
               <h2 className="text-xl font-bold text-[#0f172a] mb-6">
@@ -210,7 +208,27 @@ export default async function HostelDetailsPage({ params }: Props) {
                 ))}
               </div>
             </div>
-
+            {/* Reviews Section */}
+            <ReviewsSection
+              hostelId={hostel.id}
+              hostelName={hostel.name}
+              initialReviews={[
+                {
+                  name: "David Olatunji",
+                  date: "Oct 12, 2025",
+                  rating: 5,
+                  comment:
+                    "The power supply here is amazing. Best hostel I've stayed in so far at Unilorin.",
+                },
+                {
+                  name: "Blessing Okafor",
+                  date: "Aug 15, 2025",
+                  rating: 4,
+                  comment:
+                    "Very close to the gate, though the water can be a bit slow in the mornings.",
+                },
+              ]}
+            />
             {/* Quick Info / Description */}
             {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">

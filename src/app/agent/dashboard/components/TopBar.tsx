@@ -1,5 +1,5 @@
-import React from "react";
-import { IoNotifications, IoSearch, IoMenu } from "react-icons/io5";
+import { IoNotifications, IoSearch, IoMenu, IoTime } from "react-icons/io5";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TopBarProps {
   profile: {
@@ -25,6 +25,22 @@ const TopBar: React.FC<TopBarProps> = ({
   setIsNotificationsOpen,
   activeTab,
 }) => {
+  const notifications = [
+    { id: 1, text: "New lead from John Doe", time: "2 mins ago", type: "lead" },
+    {
+      id: 2,
+      text: "Property 'Sunshine Premium' viewed 50 times",
+      time: "1 hour ago",
+      type: "stat",
+    },
+    {
+      id: 3,
+      text: "Listing 'Royal Court' marked as active",
+      time: "5 hours ago",
+      type: "update",
+    },
+  ];
+
   return (
     <header className="sticky top-0 bg-white/80 backdrop-blur-xl border-b border-gray-100 p-4 md:p-6 flex items-center justify-between z-20">
       <div className="flex items-center gap-4">
@@ -52,12 +68,60 @@ const TopBar: React.FC<TopBarProps> = ({
           />
         </div>
 
-        <button
-          onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-          className="relative p-2.5 hover:bg-gray-100 rounded-full text-gray-500 transition-colors">
-          <IoNotifications className="text-xl" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+            className="relative p-2.5 hover:bg-gray-100 rounded-full text-gray-500 transition-colors">
+            <IoNotifications className="text-xl" />
+            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+          </button>
+
+          <AnimatePresence>
+            {isNotificationsOpen && (
+              <motion.div
+                key="notifications-dropdown"
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                className="absolute right-0 mt-4 w-80 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden z-50">
+                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                  <h3 className="font-bold text-gray-900">Notifications</h3>
+                  <button className="text-xs text-blue-600 font-bold">
+                    Mark all as read
+                  </button>
+                </div>
+                <div className="max-h-96 overflow-y-auto">
+                  {notifications.map((notif) => (
+                    <div
+                      key={notif.id}
+                      className="p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 flex gap-3">
+                      <div
+                        className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
+                          notif.type === "lead"
+                            ? "bg-blue-500"
+                            : notif.type === "stat"
+                              ? "bg-green-500"
+                              : "bg-amber-500"
+                        }`}
+                      />
+                      <div>
+                        <p className="text-sm text-gray-800 leading-tight">
+                          {notif.text}
+                        </p>
+                        <p className="text-[10px] text-gray-400 mt-1 flex items-center gap-1">
+                          <IoTime /> {notif.time}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button className="w-full p-4 text-center text-sm font-bold text-gray-500 hover:bg-gray-50 transition-colors">
+                  View All Notifications
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
           <div className="text-right hidden md:block">

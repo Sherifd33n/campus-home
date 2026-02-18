@@ -18,25 +18,43 @@ const FavoriteContext = createContext<FavoriteContextType | undefined>(
 export const FavoriteProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Use lazy initialization to recover state on mount
-  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("favoriteHostels");
       if (saved) {
         try {
-          return JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          const timer = setTimeout(() => {
+            setFavoriteIds(parsed);
+            setIsHydrated(true);
+          }, 0);
+          return () => clearTimeout(timer);
         } catch (e) {
           console.error("Failed to parse favorites", e);
+          const timer = setTimeout(() => {
+            setIsHydrated(true);
+          }, 0);
+          return () => clearTimeout(timer);
         }
+      } else {
+        const timer = setTimeout(() => {
+          setIsHydrated(true);
+        }, 0);
+        return () => clearTimeout(timer);
       }
     }
-    return [];
-  });
+  }, []);
 
-  // Persist state to localStorage only when it changes
+  // Persist state to localStorage only when it changes and after hydration
   useEffect(() => {
-    localStorage.setItem("favoriteHostels", JSON.stringify(favoriteIds));
-  }, [favoriteIds]);
+    if (isHydrated) {
+      localStorage.setItem("favoriteHostels", JSON.stringify(favoriteIds));
+    }
+  }, [favoriteIds, isHydrated]);
 
   const toggleFavorite = (hostelId: string) => {
     setFavoriteIds((prev) =>

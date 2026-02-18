@@ -394,6 +394,7 @@ const AgentDashboard = () => {
       {/* Modals */}
       <AnimatePresence>
         <ListingModal
+          key="listing-modal"
           isPropertyModalOpen={isPropertyModalOpen}
           setIsPropertyModalOpen={setIsPropertyModalOpen}
           editingProperty={editingProperty}
@@ -411,12 +412,14 @@ const AgentDashboard = () => {
         />
 
         <ViewListingModal
+          key="view-listing-modal"
           isViewModalOpen={isViewModalOpen}
           setIsViewModalOpen={setIsViewModalOpen}
           viewingProperty={viewingProperty}
         />
 
         <LeadDetailsModal
+          key="lead-details-modal"
           viewingLead={viewingLead}
           setViewingLead={setViewingLead}
           updateLeadStatus={updateLeadStatus}

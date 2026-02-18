@@ -7,6 +7,10 @@ import { Toaster } from "sonner";
 
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { FavoriteProvider } from "@/context/FavoriteContext";
+import { ComparisonProvider } from "@/context/ComparisonContext";
+import { AuthProvider } from "@/context/AuthContext";
+
+import { ReviewProvider } from "@/context/ReviewContext";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -28,13 +32,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.className} antialiased`}>
-        <FavoriteProvider>
-          <LayoutWrapper>{children}</LayoutWrapper>
+        <ReviewProvider>
+          <FavoriteProvider>
+            <AuthProvider>
+              <ComparisonProvider>
+                <LayoutWrapper>{children}</LayoutWrapper>
 
-          {/* Toast Notifications */}
-          <Toaster position="top-center" richColors />
-          <ToastContainer position="top-right" />
-        </FavoriteProvider>
+                {/* Toast Notifications */}
+                <Toaster position="top-center" richColors />
+                <ToastContainer position="top-right" />
+              </ComparisonProvider>
+            </AuthProvider>
+          </FavoriteProvider>
+        </ReviewProvider>
       </body>
     </html>
   );

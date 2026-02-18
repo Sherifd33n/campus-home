@@ -2,30 +2,17 @@
 
 // components/HostelCard.tsx
 import { useFavorites } from "@/context/FavoriteContext";
-import { FaHeart, FaRegHeart, FaLocationDot } from "react-icons/fa6";
+import { useComparison } from "@/context/ComparisonContext";
+import {
+  FaHeart,
+  FaRegHeart,
+  FaLocationDot,
+  FaCodeCompare,
+} from "react-icons/fa6";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Hostel {
-  id: string;
-  slug: string;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  distanceToCampus: string;
-  rating: number;
-  reviews: number;
-  startingPrice: number;
-  images: string[];
-  amenities: string[];
-  rooms: Array<{
-    type: string;
-    price: number;
-    availability: string;
-  }>;
-  gender: string;
-}
+import { Hostel } from "@/data/hostel";
 
 interface HostelCardProps {
   hostel: Hostel;
@@ -37,7 +24,11 @@ export default function HostelCard({
   onFavoriteChange,
 }: HostelCardProps) {
   const { favoriteIds, toggleFavorite } = useFavorites();
+  const { isInComparison, addToComparison, removeFromComparison } =
+    useComparison();
+
   const favorited = favoriteIds.includes(hostel.id);
+  const inComparison = isInComparison(hostel.id);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -46,6 +37,16 @@ export default function HostelCard({
 
     // Trigger callback if provided (for favorites page to refresh if needed)
     onFavoriteChange?.();
+  };
+
+  const handleCompareClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (inComparison) {
+      removeFromComparison(hostel.id);
+    } else {
+      addToComparison(hostel.id);
+    }
   };
 
   return (
@@ -62,20 +63,33 @@ export default function HostelCard({
         />
 
         {/* Favorite Button */}
-        <button
-          onClick={handleFavoriteClick}
-          className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition z-10 cursor-pointer ${
-            favorited
-              ? "bg-red-50 text-red-500"
-              : "bg-white/90 hover:bg-white text-gray-600"
-          }`}
-          aria-label="Add to favorites">
-          {favorited ? (
-            <FaHeart className="text-lg" />
-          ) : (
-            <FaRegHeart className="text-lg" />
-          )}
-        </button>
+        <div className="absolute top-3 right-3 flex flex-col gap-2 z-10">
+          <button
+            onClick={handleFavoriteClick}
+            className={`p-2 rounded-full shadow-md transition cursor-pointer ${
+              favorited
+                ? "bg-red-50 text-red-500"
+                : "bg-white/90 hover:bg-white text-gray-600"
+            }`}
+            aria-label="Add to favorites">
+            {favorited ? (
+              <FaHeart className="text-base" />
+            ) : (
+              <FaRegHeart className="text-base" />
+            )}
+          </button>
+
+          <button
+            onClick={handleCompareClick}
+            className={`p-2 rounded-full shadow-md transition cursor-pointer ${
+              inComparison
+                ? "bg-blue-50 text-blue-500"
+                : "bg-white/90 hover:bg-white text-gray-600"
+            }`}
+            aria-label="Add to comparison">
+            <FaCodeCompare className="text-base" />
+          </button>
+        </div>
       </div>
 
       {/* Hostel Details */}
