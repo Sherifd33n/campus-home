@@ -8,6 +8,7 @@ import { IoClose, IoAdd, IoCheckmark } from "react-icons/io5";
 import Link from "next/link";
 import Image from "next/image";
 import { Hostel } from "@/data/hostel";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const ComparisonPage = () => {
   const { comparisonIds, removeFromComparison, clearComparison } =
@@ -53,7 +54,7 @@ const ComparisonPage = () => {
           </div>
           <button
             onClick={clearComparison}
-            className="text-red-500 text-sm font-bold hover:underline">
+            className="text-red-500 text-sm font-bold bg-red-200 px-2 py-1 rounded-full cursor-pointer hover:opacity-60 duration-150">
             Clear All
           </button>
         </div>
@@ -64,7 +65,7 @@ const ComparisonPage = () => {
               <thead>
                 <tr className="border-b border-gray-100">
                   <th className="p-6 bg-gray-50/50 w-48 shrink-0"></th>
-                  {comparedHostels.map((h: any) => (
+                  {comparedHostels.map((h: Hostel) => (
                     <th
                       key={h.id}
                       className="p-6 min-w-[280px] relative border-l border-gray-100">
@@ -115,7 +116,7 @@ const ComparisonPage = () => {
                   <td className="p-6 bg-gray-50/50 font-bold text-sm text-gray-900">
                     Price / Year
                   </td>
-                  {comparedHostels.map((h: any) => (
+                  {comparedHostels.map((h: Hostel) => (
                     <td key={h.id} className="p-6 border-l border-gray-100">
                       <span className="text-xl font-bold text-[#278cf1]">
                         ₦{h.startingPrice.toLocaleString()}
@@ -136,7 +137,7 @@ const ComparisonPage = () => {
                   <td className="p-6 bg-gray-50/50 font-bold text-sm text-gray-900">
                     Distance to Campus
                   </td>
-                  {comparedHostels.map((h: any) => (
+                  {comparedHostels.map((h: Hostel) => (
                     <td
                       key={h.id}
                       className="p-6 border-l border-gray-100 text-gray-700 font-medium">
@@ -157,7 +158,7 @@ const ComparisonPage = () => {
                   <td className="p-6 bg-gray-50/50 font-bold text-sm text-gray-900">
                     Rating
                   </td>
-                  {comparedHostels.map((h: any) => (
+                  {comparedHostels.map((h: Hostel) => (
                     <td key={h.id} className="p-6 border-l border-gray-100">
                       <div className="flex items-center gap-1 text-yellow-500">
                         <IoCheckmark />
@@ -184,7 +185,7 @@ const ComparisonPage = () => {
                   <td className="p-6 bg-gray-50/50 font-bold text-sm text-gray-900">
                     Accommodation
                   </td>
-                  {comparedHostels.map((h: any) => (
+                  {comparedHostels.map((h: Hostel) => (
                     <td key={h.id} className="p-6 border-l border-gray-100">
                       <span className="px-3 py-1 bg-gray-100 text-gray-600 font-bold text-[10px] rounded-full uppercase tracking-wider">
                         {h.gender}
@@ -205,7 +206,7 @@ const ComparisonPage = () => {
                   <td className="p-6 bg-gray-50/50 font-bold text-sm text-gray-900 align-top">
                     Top Amenities
                   </td>
-                  {comparedHostels.map((h: any) => (
+                  {comparedHostels.map((h: Hostel) => (
                     <td key={h.id} className="p-6 border-l border-gray-100">
                       <div className="space-y-2">
                         {h.amenities.slice(0, 5).map((amenity: string) => (
@@ -236,4 +237,10 @@ const ComparisonPage = () => {
   );
 };
 
-export default ComparisonPage;
+const WrappedComparisonPage = () => (
+  <ProtectedRoute>
+    <ComparisonPage />
+  </ProtectedRoute>
+);
+
+export default WrappedComparisonPage;

@@ -3,41 +3,67 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
+import { useAuth } from "@/context/AuthContext";
 import {
   IoArrowBack,
   IoCheckmarkCircle,
   IoMail,
   IoLockClosed,
+  IoEye,
+  IoEyeOff,
+  IoAlertCircle,
 } from "react-icons/io5";
 import Link from "next/link";
+import { validateEmail } from "@/lib/validators";
 
 const StudentLoginPage = () => {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const { login } = useAuth();
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({ email: "", password: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear errors on change
+    setError("");
+    setFieldErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    // Client-side pre-checks before hitting AuthContext
+    const emailErr = validateEmail(formData.email);
+    if (emailErr) {
+      setFieldErrors((prev) => ({ ...prev, email: emailErr }));
+      return;
+    }
+    if (!formData.password) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        password: "Password is required",
+      }));
+      return;
+    }
+
     setLoading(true);
-
-    // Simulate dummy login API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setLoading(false);
-    setSuccess(true);
-
-    // Redirect after success
-    setTimeout(() => {
-      router.push("/");
-    }, 3000);
+    try {
+      await login(formData.email, formData.password);
+      setSuccess(true);
+      setTimeout(() => router.push("/"), 2000);
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong. Try again.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (success) {
@@ -72,50 +98,54 @@ const StudentLoginPage = () => {
         </Link>
 
         <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl shadow-blue-900/5 overflow-hidden border border-gray-100 flex flex-col md:flex-row min-h-[600px]">
+          {/* Left Panel */}
           <div className="md:w-1/2 p-8 text-white flex flex-col justify-center relative overflow-hidden group">
-            {/* Background Image with Overlay */}
             <div
               className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
               style={{ backgroundImage: "url('/images/menu.jpg')" }}
             />
             <div className="absolute inset-0 bg-blue-900/80 backdrop-blur-[2px]" />
-
-            <div className="relative z-10 font-roboto">
+            <div className="relative z-10">
               <h2 className="text-3xl font-bold mb-4">Welcome Back</h2>
               <p className="text-blue-100 text-sm leading-relaxed mb-8">
                 Sign in to access your saved hostels, manage your applications,
                 and track your inquiries.
               </p>
-
               <div className="space-y-4">
-                <div className="flex items-center text-sm text-blue-50/90">
-                  <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-4 text-xs font-bold border border-white/30">
-                    1
-                  </span>
-                  Manage Your Favorites
-                </div>
-                <div className="flex items-center text-sm text-blue-50/90">
-                  <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-4 text-xs font-bold border border-white/30">
-                    2
-                  </span>
-                  Track Your Applications
-                </div>
-                <div className="flex items-center text-sm text-blue-50/90">
-                  <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-4 text-xs font-bold border border-white/30">
-                    3
-                  </span>
-                  Exclusive Student Deals
-                </div>
+                {[
+                  "Manage Your Favorites",
+                  "Track Your Applications",
+                  "Exclusive Student Deals",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center text-sm text-blue-50/90">
+                    <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-4 text-xs font-bold border border-white/30">
+                      {i + 1}
+                    </span>
+                    {item}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
+          {/* Right Panel */}
           <div className="md:flex-1 p-8 lg:p-12">
             <h1 className="text-2xl font-bold text-gray-900 mb-6">
               Student Sign In
             </h1>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Error Banner */}
+            {error && (
+              <div className="mb-5 flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
+                <IoAlertCircle className="text-red-500 mt-0.5 shrink-0 text-base" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+              {/* Email */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Email Address
@@ -125,15 +155,25 @@ const StudentLoginPage = () => {
                   <input
                     type="email"
                     name="email"
-                    required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#278cf1]/20 focus:border-[#278cf1] transition-all text-sm"
+                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#278cf1]/20 focus:border-[#278cf1] transition-all text-sm ${
+                      fieldErrors.email
+                        ? "border-red-300 bg-red-50/30"
+                        : "border-gray-200"
+                    }`}
                     placeholder="email@example.com"
                   />
                 </div>
+                {fieldErrors.email && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <IoAlertCircle className="text-sm shrink-0" />
+                    {fieldErrors.email}
+                  </p>
+                )}
               </div>
 
+              {/* Password */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Password
@@ -141,15 +181,33 @@ const StudentLoginPage = () => {
                 <div className="relative">
                   <IoLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
-                    required
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#278cf1]/20 focus:border-[#278cf1] transition-all text-sm"
+                    className={`w-full pl-11 pr-12 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#278cf1]/20 focus:border-[#278cf1] transition-all text-sm ${
+                      fieldErrors.password
+                        ? "border-red-300 bg-red-50/30"
+                        : "border-gray-200"
+                    }`}
                     placeholder="••••••••"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }>
+                    {showPassword ? <IoEyeOff /> : <IoEye />}
+                  </button>
                 </div>
+                {fieldErrors.password && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <IoAlertCircle className="text-sm shrink-0" />
+                    {fieldErrors.password}
+                  </p>
+                )}
               </div>
 
               <div className="flex justify-end">
@@ -167,7 +225,7 @@ const StudentLoginPage = () => {
                 {loading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3" />
-                    Processing...
+                    Signing In...
                   </>
                 ) : (
                   "Sign In"

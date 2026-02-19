@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+
 import { Toaster } from "sonner";
 
 import LayoutWrapper from "@/components/LayoutWrapper";
@@ -40,7 +39,6 @@ export default function RootLayout({
 
                 {/* Toast Notifications */}
                 <Toaster position="top-center" richColors />
-                <ToastContainer position="top-right" />
               </ComparisonProvider>
             </AuthProvider>
           </FavoriteProvider>

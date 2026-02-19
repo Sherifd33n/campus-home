@@ -3,57 +3,75 @@
 import React, { useState } from "react";
 import Overlay from "../../public/images/menu.jpg";
 import Image from "next/image";
-import { FaGraduationCap } from "react-icons/fa";
 import { IoBedSharp, IoPricetags, IoSearchSharp } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import { institutions } from "@/data/listing";
 import { roomTypes } from "@/data/hostel";
+import { institutions } from "@/data/listing";
+import type { Institution } from "@/types/listing";
+import UniversityAutocomplete from "./UniversityAutocomplete";
 
 const MenuOverlay = () => {
   const router = useRouter();
-  const [university, setUniversity] = useState("");
+  const [universityInput, setUniversityInput] = useState(""); // display text
+  const [selectedInstitution, setSelectedInstitution] =
+    useState<Institution | null>(null);
   const [budget, setBudget] = useState("");
   const [roomType, setRoomType] = useState(roomTypes[0].type);
   const [error, setError] = useState("");
 
+  const handleSelect = (inst: Institution) => {
+    setSelectedInstitution(inst);
+    setUniversityInput(inst.name);
+    setError("");
+  };
+
+  const handleClear = () => {
+    setSelectedInstitution(null);
+    setUniversityInput("");
+    setError("");
+  };
+
   const handleSearch = () => {
-    // Clear previous errors
     setError("");
 
-    // Validate university input
-    if (!university.trim()) {
+    if (!universityInput.trim()) {
       setError("Please enter a university name");
       return;
     }
 
-    // Find matching institution (case-insensitive search by name or shortName)
-    const matchedInstitution = institutions.find(
-      (inst) =>
-        inst.name.toLowerCase().includes(university.toLowerCase()) ||
-        inst.shortName.toLowerCase().includes(university.toLowerCase()),
-    );
+    // Use the selected institution from the dropdown first;
+    // fall back to fuzzy-matching what the user typed (in case they skipped the dropdown)
+    let institution = selectedInstitution;
 
-    if (!matchedInstitution) {
-      setError("University not found. Please check the name and try again.");
+    if (!institution) {
+      institution =
+        institutions.find(
+          (inst: Institution) =>
+            inst.name.toLowerCase().includes(universityInput.toLowerCase()) ||
+            inst.shortName
+              .toLowerCase()
+              .includes(universityInput.toLowerCase()),
+        ) ?? null;
+    }
+
+    if (!institution) {
+      setError("University not found. Please select from the suggestions.");
       return;
     }
 
-    // Construct URL with search params
     const params = new URLSearchParams();
     if (budget) params.append("budget", budget);
     if (roomType) params.append("roomType", roomType);
 
-    const url = `/states/${matchedInstitution.stateId}/${matchedInstitution.schoolSlug}${
+    const url = `/states/${institution.stateId}/${institution.schoolSlug}${
       params.toString() ? `?${params.toString()}` : ""
     }`;
 
-    // Navigate to school page
     router.push(url);
   };
 
   return (
     <div>
-      {" "}
       <div className="relative w-full h-[calc(100vh-65px)]">
         <Image
           src={Overlay}
@@ -74,7 +92,7 @@ const MenuOverlay = () => {
             Campus
           </h1>
 
-          <p className="mt-4 text-base text-gray-300  mx-[30%]">
+          <p className="mt-4 text-base text-gray-300 mx-[30%]">
             Connecting students with premium, verified hostels near campus.
             Secure your space for the upcoming session.
           </p>
@@ -86,26 +104,25 @@ const MenuOverlay = () => {
           )}
 
           <div className="mt-6 bg-white px-4 py-3 rounded-2xl flex items-center justify-between gap-7">
-            <div className="flex items-center gap-2">
-              <FaGraduationCap size={20} className="text-[#278cf1]" />
-              <div className="flex flex-col gap-0.5 items-start">
-                <p className="text-[10px] font-semibold text-gray-600">
-                  UNIVERSITY
-                </p>
-                <input
-                  type="search"
-                  placeholder="e.g. University of Ilorin"
-                  className="text-gray-700 text-sm outline-none"
-                  value={university}
-                  onChange={(e) => setUniversity(e.target.value)}
-                />
-              </div>
-            </div>
+            {/* University Autocomplete */}
+            <UniversityAutocomplete
+              value={universityInput}
+              onChange={(val) => {
+                setUniversityInput(val);
+                // If the user edits after selecting, clear the selection
+                if (selectedInstitution) setSelectedInstitution(null);
+                setError("");
+              }}
+              onSelect={handleSelect}
+              onClear={handleClear}
+              error={error && !universityInput ? error : undefined}
+            />
 
-            <hr className="h-full w-0.5 bg-gray-200 rounded-full" />
+            <hr className="h-full w-0.5 bg-gray-200 rounded-full self-stretch" />
 
+            {/* Budget */}
             <div className="flex items-center gap-2">
-              <IoPricetags size={20} className="text-[#278cf1]" />
+              <IoPricetags size={20} className="text-[#278cf1] shrink-0" />
               <div className="flex flex-col gap-0.5 items-start">
                 <p className="text-[10px] font-semibold text-gray-600">
                   BUDGET
@@ -113,17 +130,18 @@ const MenuOverlay = () => {
                 <input
                   type="number"
                   placeholder="e.g. 150000"
-                  className="text-gray-700 text-sm outline-none"
+                  className="text-gray-700 text-sm outline-none w-24"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
                 />
               </div>
             </div>
 
-            <hr className="h-full w-0.5 bg-gray-200 rounded-full" />
+            <hr className="h-full w-0.5 bg-gray-200 rounded-full self-stretch" />
 
+            {/* Room Type */}
             <div className="flex items-center gap-2">
-              <IoBedSharp size={20} className="text-[#278cf1]" />
+              <IoBedSharp size={20} className="text-[#278cf1] shrink-0" />
               <div className="flex flex-col gap-0.5 items-start">
                 <p className="text-[10px] font-semibold text-gray-600">
                   ROOM TYPE
@@ -142,7 +160,7 @@ const MenuOverlay = () => {
             </div>
 
             <button
-              className="flex items-center gap-1 bg-[#278cf1] py-3 px-4 rounded-md text-sm cursor-pointer hover:opacity-60 duration-150"
+              className="flex items-center gap-1 bg-[#278cf1] py-3 px-4 rounded-md text-sm cursor-pointer hover:opacity-60 duration-150 shrink-0 text-white"
               onClick={handleSearch}>
               <IoSearchSharp size={18} />
               Search

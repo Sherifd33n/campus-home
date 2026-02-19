@@ -11,21 +11,26 @@ import { FaRegHeart, FaStar } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
 import { useReviews } from "@/context/ReviewContext";
 import { toast } from "sonner";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const StudentProfilePage = () => {
   const { favoriteIds } = useFavorites();
-  const { user, inquiries, updateUser, isLoading } = useAuth();
+  const { user, inquiries, updateUser } = useAuth();
   const { getUserReviews } = useReviews();
-  const userReviews = getUserReviews(user.email);
+
   const [activeTab, setActiveTab] = useState<"overview" | "settings">(
     "overview",
   );
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user.name,
-    phone: user.phone,
-    university: user.university,
+    name: user?.name || "",
+    phone: user?.phone || "",
+    university: user?.university || "",
   });
+
+  if (!user) return null;
+
+  const userReviews = getUserReviews(user.email);
 
   const favoriteHostels = favoriteIds
     .map((id) => schoolHostels.find((h) => h.id === id))
@@ -35,9 +40,9 @@ const StudentProfilePage = () => {
     if (isEditing) {
       // Cancel edit, reset form
       setFormData({
-        name: user.name,
-        phone: user.phone,
-        university: user.university,
+        name: user?.name || "",
+        phone: user?.phone || "",
+        university: user?.university || "",
       });
     }
     setIsEditing(!isEditing);
@@ -53,14 +58,6 @@ const StudentProfilePage = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#278cf1]"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-[#f8fafc] min-h-screen py-12 mt-16 pb-20">
@@ -312,7 +309,7 @@ const StudentProfilePage = () => {
                       </label>
                       <input
                         type="email"
-                        value={user.email}
+                        value={user?.email}
                         disabled
                         className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed"
                       />
@@ -416,4 +413,10 @@ const StudentProfilePage = () => {
   );
 };
 
-export default StudentProfilePage;
+const WrappedProfilePage = () => (
+  <ProtectedRoute>
+    <StudentProfilePage />
+  </ProtectedRoute>
+);
+
+export default WrappedProfilePage;

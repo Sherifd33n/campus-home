@@ -1,10 +1,12 @@
+"use client";
 
 import Container from "@/components/Container";
 import FavoritesCl from "@/components/FavoriteCl";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
-export default function FavoritesPage() {
+function FavoritesPage() {
   return (
     <div className="p-10 bg-[#f6f7f8] min-h-screen">
       <Container>
@@ -32,3 +34,11 @@ export default function FavoritesPage() {
     </div>
   );
 }
+
+const WrappedFavoritesPage = () => (
+  <ProtectedRoute>
+    <FavoritesPage />
+  </ProtectedRoute>
+);
+
+export default WrappedFavoritesPage;
