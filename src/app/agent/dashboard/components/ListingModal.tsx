@@ -1,29 +1,46 @@
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { IoTrash, IoAdd } from "react-icons/io5";
-import { nigeriaStates, institutions } from "@/data/listing";
+import { nigeriaStates } from "@/data/listing";
 import { roomTypes as availableRoomTypes } from "@/data/hostel";
+import { Institution } from "@/types/listing";
 import { Listing } from "../types";
+
+interface ListingFormData {
+  state: string;
+  schoolId: string;
+  name: string;
+  about: string;
+  gender: string;
+  distanceToCampus: string;
+}
+
+interface PropertyRoom {
+  type: string;
+  price: string | number;
+  availability: string;
+}
 
 interface ListingModalProps {
   isPropertyModalOpen: boolean;
   setIsPropertyModalOpen: (isOpen: boolean) => void;
   editingProperty: Listing | null;
   handleSaveProperty: (e: React.FormEvent<HTMLFormElement>) => void;
-  formData: any;
+  formData: ListingFormData;
   handleInputChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => void;
-  filteredSchools: any[];
+  filteredSchools: Institution[];
   selectedAmenities: string[];
   setSelectedAmenities: React.Dispatch<React.SetStateAction<string[]>>;
   selectedImages: string[];
   removeImage: (index: number) => void;
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  propertyRooms: any[];
-  setPropertyRooms: React.Dispatch<React.SetStateAction<any[]>>;
+  propertyRooms: PropertyRoom[];
+  setPropertyRooms: React.Dispatch<React.SetStateAction<PropertyRoom[]>>;
 }
 
 const ListingModal: React.FC<ListingModalProps> = ({
@@ -215,10 +232,11 @@ const ListingModal: React.FC<ListingModalProps> = ({
                 <div
                   key={idx}
                   className="aspect-square bg-gray-50 rounded-xl border border-gray-200 overflow-hidden relative group">
-                  <img
+                  <Image
                     src={img}
                     alt={`Preview ${idx}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   <button
                     type="button"

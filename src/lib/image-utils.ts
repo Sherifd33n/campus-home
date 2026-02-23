@@ -16,9 +16,9 @@ export const fileToBase64 = (file: File): Promise<string> => {
  */
 export const compressImage = (
     base64Str: string,
-    maxWidth: number = 400,
-    maxHeight: number = 300,
-    quality: number = 0.3
+    maxWidth: number = 600,
+    maxHeight: number = 450,
+    quality: number = 0.5
 ): Promise<string> => {
     return new Promise((resolve) => {
         const img = new Image();
