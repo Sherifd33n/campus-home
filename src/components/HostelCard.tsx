@@ -56,7 +56,7 @@ export default function HostelCard({
       {/* Hostel Image */}
       <div className="relative h-36">
         <Image
-          src={hostel.images[0]}
+          src={hostel.images[0] || "/images/menu-image.jpg"}
           alt={hostel.name}
           fill
           className="object-cover group-hover:scale-105 transition duration-500"

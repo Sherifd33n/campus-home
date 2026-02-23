@@ -75,6 +75,8 @@ export interface Hostel {
     country: string;
     distanceToCampus: string;
     verified: boolean;
+    agentVerified: boolean;
+    inspectionCompleted: boolean;
     gender: string;
     totalUnits: number;
     schoolSlug: string;
@@ -93,6 +95,7 @@ export interface Hostel {
     noHiddenFees: boolean;
     featured: boolean;
     about: string;
+    agentName: string;
     createdAt: string;
 }
 
@@ -158,6 +161,8 @@ const generateHostels = () => {
 
             const hostelName = hostelNames[(schoolIndex * numHostels + i) % hostelNames.length];
             const street = streets[(schoolIndex * numHostels + i) % streets.length];
+            const agentNames = ["Sheriff Jamiu", "Premium Properties", "Campus Realty", "Scholar Homes Agent", "Victory Agents"];
+            const agentName = agentNames[(schoolIndex * numHostels + i) % agentNames.length];
 
             hostels.push({
                 id: `ng-${hostelId}`,
@@ -168,7 +173,9 @@ const generateHostels = () => {
                 state: "Nigeria",
                 country: "Nigeria",
                 distanceToCampus: `${itemRng.nextInt(2, 13)} mins walk to campus`,
-                verified: itemRng.next() > 0.3,
+                verified: itemRng.next() > 0.2, // 80% chance
+                agentVerified: itemRng.next() > 0.2, // 80% chance
+                inspectionCompleted: itemRng.next() > 0.2, // 80% chance
                 gender: itemRng.choice(genderOptions),
                 totalUnits: itemRng.nextInt(40, 100),
                 schoolSlug: slug,
@@ -183,6 +190,7 @@ const generateHostels = () => {
                 noHiddenFees: itemRng.next() > 0.3,
                 featured: itemRng.next() > 0.85,
                 about: `Welcome to ${hostelName}, a premium student residence located just ${itemRng.nextInt(2, 13)} minutes from campus. This hostel offers a perfect blend of comfort, security, and convenience for serious students. Our facilities are well-maintained and designed to provide a conducive environment for both academic excellence and social interaction. With amenities like ${amenities.join(", ")}, we ensure that your stay is comfortable and hassle-free. The rooms are spacious, well-ventilated, and come with modern fittings. At ${hostelName}, we prioritize your safety with 24/7 security measures and a friendly management team always ready to assist you in making your campus life memorable.`,
+                agentName,
                 createdAt: `2025-${String(itemRng.nextInt(1, 2)).padStart(2, '0')}-${String(itemRng.nextInt(1, 28)).padStart(2, '0')}`
             });
 

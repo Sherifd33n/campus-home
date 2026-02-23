@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "sonner";
 import { schoolHostels, Hostel } from "@/data/hostel";
 
 interface FavoriteContextType {
@@ -52,7 +53,15 @@ export const FavoriteProvider: React.FC<{ children: React.ReactNode }> = ({
   // Persist state to localStorage only when it changes and after hydration
   useEffect(() => {
     if (isHydrated) {
-      localStorage.setItem("favoriteHostels", JSON.stringify(favoriteIds));
+      try {
+        localStorage.setItem("favoriteHostels", JSON.stringify(favoriteIds));
+      } catch (e) {
+        if (e instanceof DOMException && e.name === "QuotaExceededError") {
+          toast.error("Favorites storage full.");
+        } else {
+          console.error("Failed to save favorites", e);
+        }
+      }
     }
   }, [favoriteIds, isHydrated]);
 

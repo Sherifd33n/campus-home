@@ -65,7 +65,7 @@ export default function StateFilter() {
             />
           </div>
 
-          <div className="bg-[#e9f3fe] p-2 rounded-md cursor-pointer">
+          <div className="bg-[#e9f3fe] p-2 rounded-md cursor-pointer hidden md:block">
             <IoFilterSharp size={20} className="text-[#278cf1]" />
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function StateFilter() {
             <Link
               key={institution.id}
               href={`/states/${institution.stateId}/${institution.schoolSlug}`}
-              className="relative h-55 rounded-xl overflow-hidden group">
+              className="relative h-48 md:h-55 rounded-xl overflow-hidden group">
               <Image
                 src={institution.image}
                 alt={institution.name}

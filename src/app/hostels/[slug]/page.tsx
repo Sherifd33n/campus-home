@@ -1,9 +1,10 @@
-import React from "react";
+"use client";
+
+import React, { useState, use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { schoolHostels } from "@/data/hostel";
+import { useHostels } from "@/context/HostelContext";
 import { institutions } from "@/data/listing";
-import { states } from "@/data/state";
 import Container from "@/components/Container";
 import ImageGallery from "@/components/ImageGallery";
 import {
@@ -17,17 +18,40 @@ import {
   FaUserGroup,
 } from "react-icons/fa6";
 import { FaBath } from "react-icons/fa";
-import { MdOutlineKitchen, MdVerified } from "react-icons/md";
+import {
+  MdOutlineKitchen,
+  MdVerified,
+  MdVerifiedUser,
+  MdOutlineFactCheck,
+  MdOutlineAssignmentReturn,
+} from "react-icons/md";
+import { FaShieldHeart } from "react-icons/fa6";
 import ReviewsSection from "@/components/ReviewsSection";
+import ScheduleVisitModal from "@/components/ScheduleVisitModal";
+import ReservationModal from "@/components/ReservationModal";
+import BookingModal from "@/components/BookingModal";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-export default async function HostelDetailsPage({ params }: Props) {
-  const { slug } = await params;
+export default function HostelDetailsPage({ params }: Props) {
+  const { slug } = use(params);
+  const { getHostelBySlug, isLoading } = useHostels();
+  const [selectedRoomIndex, setSelectedRoomIndex] = useState(0);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
-  const hostel = schoolHostels.find((h) => h.slug === slug);
+  const hostel = getHostelBySlug(slug);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   if (!hostel) {
     notFound();
@@ -36,7 +60,6 @@ export default async function HostelDetailsPage({ params }: Props) {
   const school = institutions.find(
     (inst) => inst.schoolSlug === hostel.schoolSlug,
   );
-  const state = states.find((s) => s.id === school?.stateId);
 
   // Helper to map amenities to icons
   const getAmenityIcon = (amenity: string) => {
@@ -87,37 +110,37 @@ export default async function HostelDetailsPage({ params }: Props) {
           <div className="lg:col-span-2 space-y-8">
             {/* Header Info */}
             <div className="">
-              <p className="text-[#278cf1] capitalize inline-flex items-center  bg-[#e1ebf7] px-2.5 py-0.5 border border-[#278cf1] rounded-full text-[12px] mb-2 gap-1">
-                <MdVerified size={14} /> Verified Property
-              </p>
-              <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="flex flex-wrap gap-2 mb-3">
+                <p className="text-[#278cf1] capitalize inline-flex items-center bg-[#e1ebf7] px-2.5 py-1 border border-[#278cf1]/30 rounded-full text-[11px] font-semibold gap-1.5 shadow-sm">
+                  <MdVerified size={14} /> Verified Property
+                </p>
+                {hostel.agentVerified && (
+                  <p className="text-emerald-600 capitalize inline-flex items-center bg-emerald-50 px-2.5 py-1 border border-emerald-200 rounded-full text-[11px] font-semibold gap-1.5 shadow-sm">
+                    <MdVerifiedUser size={14} /> Verified Agent
+                  </p>
+                )}
+                {hostel.inspectionCompleted && (
+                  <p className="text-amber-600 capitalize inline-flex items-center bg-amber-50 px-2.5 py-1 border border-amber-200 rounded-full text-[11px] font-semibold gap-1.5 shadow-sm">
+                    <MdOutlineFactCheck size={14} /> Inspection Completed
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
-                  {/* <div className="flex items-center gap-2 mb-2 ">
-                    {hostel.verified && (
-                      <span className="bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border border-green-200">
-                        Verified
-                      </span>
-                    )}
-                    {hostel.featured && (
-                      <span className="bg-[#e9f3fe] text-[#278cf1] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border border-[#278cf1]/20">
-                        Featured
-                      </span>
-                    )}
-                  </div> */}
-                  <h1 className="text-3xl md:text-4xl font-bold text-[#0f172a]">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0f172a] leading-tight">
                     {hostel.name}
                   </h1>
-                  <p className="flex items-center gap-1.5 text-[#6b7686] mt-2">
+                  <p className="flex items-center gap-1.5 text-[#6b7686] mt-2 text-sm sm:text-base">
                     <FaLocationDot className="text-[#278cf1]" />
                     {hostel.address}, {hostel.city}
                   </p>
-                  <p className="inline-block mt-3 px-3 py-1 bg-slate-100 text-[#0f172a] text-sm font-medium rounded-full">
+                  <p className="inline-block mt-3 px-3 py-1 bg-slate-100 text-[#0f172a] text-[12px] sm:text-sm font-medium rounded-full">
                     {hostel.distanceToCampus}
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="flex items-center justify-end gap-1 text-yellow-500 mb-1">
+                  <div className="text-left md:text-right">
+                    <div className="flex items-center md:justify-end gap-1 text-yellow-500 mb-1">
                       <FaStar />
                       <span className="text-[#0f172a] font-bold">
                         {hostel.rating}
@@ -164,7 +187,12 @@ export default async function HostelDetailsPage({ params }: Props) {
                       {hostel.rooms.map((room, idx) => (
                         <tr
                           key={idx}
-                          className="group hover:bg-slate-50 transition-colors">
+                          onClick={() => setSelectedRoomIndex(idx)}
+                          className={`group cursor-pointer transition-all ${
+                            idx === selectedRoomIndex
+                              ? "bg-blue-50/80 border-l-4 border-l-[#278cf1]"
+                              : "hover:bg-slate-50"
+                          }`}>
                           <td className="px-6 py-5 font-medium text-[#0f172a]">
                             {room.type}
                           </td>
@@ -206,6 +234,51 @@ export default async function HostelDetailsPage({ params }: Props) {
                     </span>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Refund Policy Section */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+              <h2 className="text-xl font-bold text-[#0f172a] mb-6 flex items-center gap-2">
+                <MdOutlineAssignmentReturn
+                  className="text-[#278cf1]"
+                  size={24}
+                />
+                Refund Policy
+              </h2>
+              <div className="space-y-4 text-sm text-slate-600">
+                <p className="leading-relaxed">
+                  We understand that plans can change. Our goal is to ensure you
+                  feel secure while booking your home.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <h4 className="font-bold text-[#0f172a] mb-2 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#278cf1]"></span>
+                      48-Hour Guarantee
+                    </h4>
+                    <p>
+                      If the agent does not respond to your reservation request
+                      within 48 hours, a full automatic refund is processed to
+                      your original payment method.
+                    </p>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <h4 className="font-bold text-[#0f172a] mb-2 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#278cf1]"></span>
+                      Reservation Credit
+                    </h4>
+                    <p>
+                      The 10% reservation fee is deductible from your total rent
+                      once payment is finalized with the agent.
+                    </p>
+                  </div>
+                </div>
+                <p className="text-[12px] italic mt-4 border-t pt-4">
+                  * All refunds are subject to our standard processing times
+                  (3-5 business days). Physical inspection is highly recommended
+                  before final payment.
+                </p>
               </div>
             </div>
             {/* Reviews Section */}
@@ -278,24 +351,99 @@ export default async function HostelDetailsPage({ params }: Props) {
             <div className="sticky top-24 space-y-6">
               <div className="bg-white p-6 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100">
                 <div className="mb-6">
-                  <p className="text-[#6b7686] text-sm">Starting from</p>
+                  <p className="text-[#6b7686] text-sm">Selected Room Price</p>
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-semibold text-[#0f172a]">
-                      ₦{hostel.startingPrice.toLocaleString()}
+                      ₦{hostel.rooms[selectedRoomIndex].price.toLocaleString()}
                     </span>
                     <span className="text-[#6b7686] text-sm font-medium">
                       /year
                     </span>
                   </div>
+                  <div className="mt-1">
+                    <span className="text-xs font-semibold text-[#278cf1] px-2 py-0.5 bg-blue-50 rounded-full">
+                      {hostel.rooms[selectedRoomIndex].type}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="space-y-3 mb-6">
-                  <button className="w-full py-3 cursor-pointer bg-[#278cf1] text-white font-bold rounded-xl shadow-lg shadow-[#278cf1]/30 hover:bg-[#1a76d1] transition">
+                  {hostel.verified &&
+                  hostel.agentVerified &&
+                  hostel.inspectionCompleted ? (
+                    <button
+                      onClick={() => setIsReservationModalOpen(true)}
+                      className="w-full py-2.5 md:py-3.5 cursor-pointer bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition flex flex-col items-center justify-center leading-tight">
+                      <span>Reserve with 10%</span>
+                      <span className="text-[11px] opacity-90 font-medium">
+                        ₦
+                        {(
+                          hostel.rooms[selectedRoomIndex].price * 0.1
+                        ).toLocaleString()}{" "}
+                        commitment fee
+                      </span>
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      className="w-full py-2.5 md:py-3.5 cursor-not-allowed bg-slate-100 text-slate-400 font-bold rounded-xl border border-slate-200 flex flex-col items-center justify-center leading-tight">
+                      <span>Reservation Unavailable</span>
+                      <span className="text-[10px] opacity-80 font-medium">
+                        Lacks full verification
+                      </span>
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => setIsBookingModalOpen(true)}
+                    className="w-full py-3 cursor-pointer bg-[#278cf1] text-white font-bold rounded-xl shadow-lg shadow-[#278cf1]/30 hover:bg-[#1a76d1] transition">
                     Book This Hostel
                   </button>
-                  <button className="w-full py-3 cursor-pointer bg-white text-[#278cf1] border-2 border-[#278cf1] font-bold rounded-xl hover:bg-[#f8fafc] transition">
+                  <button
+                    onClick={() => setIsScheduleModalOpen(true)}
+                    className="w-full py-3 cursor-pointer bg-white text-[#278cf1] border-2 border-[#278cf1] font-bold rounded-xl hover:bg-[#f8fafc] transition">
                     Schedule a Visit
                   </button>
+                </div>
+
+                <ScheduleVisitModal
+                  hostelName={hostel.name}
+                  agentName={hostel.agentName}
+                  isOpen={isScheduleModalOpen}
+                  onClose={() => setIsScheduleModalOpen(false)}
+                />
+
+                <ReservationModal
+                  hostelName={hostel.name}
+                  agentName={hostel.agentName}
+                  amount={hostel.rooms[selectedRoomIndex].price * 0.1}
+                  isOpen={isReservationModalOpen}
+                  onClose={() => setIsReservationModalOpen(false)}
+                />
+
+                <BookingModal
+                  hostelName={hostel.name}
+                  agentName={hostel.agentName}
+                  amount={hostel.rooms[selectedRoomIndex].price}
+                  isOpen={isBookingModalOpen}
+                  onClose={() => setIsBookingModalOpen(false)}
+                />
+
+                <div className="pt-4 border-t border-slate-50">
+                  <div className="flex items-center gap-2 p-3 bg-blue-50/50 rounded-xl border border-blue-100/50">
+                    <FaShieldHeart
+                      className="text-[#278cf1] shrink-0"
+                      size={20}
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-[11px] font-bold text-[#0f172a] uppercase tracking-wider">
+                        Money-Back Guarantee
+                      </span>
+                      <span className="text-[10px] text-slate-500 leading-tight">
+                        Full refund if agent does not respond in 48hrs
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* <div className="pt-6 border-t border-slate-100">

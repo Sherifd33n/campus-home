@@ -51,7 +51,7 @@ export default function FavoritesClient() {
 
   if (favoriteHostels.length === 0) {
     return (
-      <div className="bg-white rounded-lg p-16 text-center">
+      <div className="bg-white rounded-lg p-5 md:p-16 text-center">
         <div className="max-w-md mx-auto">
           <div className="w-20 h-20 bg-[#e9f3fe] rounded-full flex items-center justify-center mx-auto mb-6">
             <FaHeart className="text-[#278cf1] text-3xl" />
@@ -88,12 +88,12 @@ export default function FavoritesClient() {
         <button
           onClick={handleClearAll}
           className="px-3 py-2 rounded-md bg-red-600 text-white hover:opacity-50 cursor-pointer text-sm font-medium transition">
-          Clear All Favorites
+          Clear All
         </button>
       </div>
 
       {/* Favorites Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:grid-cols-4">
         {favoriteHostels.map((hostel) => (
           <HostelCard key={hostel.id} hostel={hostel} />
         ))}

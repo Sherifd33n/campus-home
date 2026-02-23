@@ -1,10 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useAuth, UserProfile, Inquiry } from "@/context/AuthContext";
+import { useHostels } from "@/context/HostelContext";
 import { institutions } from "@/data/listing";
+import { Hostel } from "@/data/hostel";
+import { fileToBase64, compressImage } from "@/lib/image-utils";
 
 // Components
 import Sidebar from "./components/Sidebar";
@@ -21,6 +25,8 @@ import { Listing, Lead, Activity } from "./types";
 
 const AgentDashboard = () => {
   const router = useRouter();
+  const { user, updateUser, inquiries, updateInquiryStatus, replyToInquiry } =
+    useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [activeLeadTab, setActiveLeadTab] = useState<
     "new" | "contacted" | "archived"
@@ -46,24 +52,9 @@ const AgentDashboard = () => {
   });
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [propertyRooms, setPropertyRooms] = useState<
-    { type: string; price: string; availability: string }[]
-  >([{ type: "Single Room", price: "", availability: "AVAILABLE" }]);
+    { type: string; price: number; availability: string }[]
+  >([{ type: "Single Room", price: 0, availability: "AVAILABLE" }]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
-
-  // Profile State
-  const [profile, setProfile] = useState<{
-    name: string;
-    agency: string;
-    phone: string;
-    email: string;
-    image: string | null;
-  }>({
-    name: "Sheriff Jamiu",
-    agency: "Premium Properties Ltd",
-    phone: "+234 812 345 6789",
-    email: "jamiu.sherif@example.com",
-    image: null,
-  });
 
   // Filtered Schools derived from formData.state
   const filteredSchools = React.useMemo(() => {
@@ -71,87 +62,46 @@ const AgentDashboard = () => {
     return institutions.filter((inst) => inst.stateId === formData.state);
   }, [formData.state]);
 
-  // Listings State
-  const [activeListings, setActiveListings] = useState<Listing[]>([
-    {
-      id: "1",
-      name: "Sunshine Premium Hostel",
-      location: "Unilorin, Ilorin",
-      state: "kwara",
-      schoolId: "unilorin",
-      price: "₦250,000",
-      status: "Active",
-      about: "A premium student residence with modern facilities.",
-      gender: "Mixed",
-      distanceToCampus: "5 mins walk",
-      amenities: ["WiFi", "24/7 Power", "Security"],
-      images: ["/images/hostels/hostel1.png"],
-      rooms: [
-        { type: "Single Room", price: "250000", availability: "AVAILABLE" },
-      ],
-      policies: {
-        utilitiesIncluded: true,
-        refundableDeposit: true,
-        noHiddenFees: true,
-      },
-    },
-    {
-      id: "2",
-      name: "Green View Apartment",
-      location: "Kwasu, Malete",
-      state: "kwara",
-      schoolId: "kwasu",
-      price: "₦180,000",
-      status: "Pending",
-      about: "Comfortable and affordable living for students.",
-      gender: "Female Only",
-      distanceToCampus: "10 mins walk",
-      amenities: ["Water Supply", "Security"],
-      images: ["/images/hostels/hostel2.png"],
-      rooms: [
-        { type: "2-Bed Shared", price: "180000", availability: "AVAILABLE" },
-      ],
-      policies: {
-        utilitiesIncluded: false,
-        refundableDeposit: true,
-        noHiddenFees: true,
-      },
-    },
-  ]);
+  const school = React.useMemo(() => {
+    return institutions.find((i) => i.id === formData.schoolId);
+  }, [formData.schoolId]);
+
+  // Listings from HostelContext
+  const { hostels, addHostel, updateHostel, deleteHostel, resetHostels } =
+    useHostels();
+
+  const activeListings = React.useMemo(() => {
+    if (!user) return [];
+    return hostels.filter(
+      (h) => h.agentName.toLowerCase() === user.name.toLowerCase(),
+    );
+  }, [hostels, user]);
 
   // Leads State
-  const [leads, setLeads] = useState<Lead[]>([
-    {
-      id: "1",
-      studentName: "Sarah Johnson",
-      property: "Sunny Side Apt",
-      message: "Is this still available? I'd like to schedule a viewing.",
-      email: "sarah.j@example.com",
-      phone: "+234 801 234 5678",
-      date: "2 hours ago",
-      status: "new",
-    },
-    {
-      id: "2",
-      studentName: "Mike Peters",
-      property: "Student Haven",
-      message: "What's the deposit fee for this unit?",
-      email: "mike.p@example.com",
-      phone: "+234 809 876 5432",
-      date: "5 hours ago",
-      status: "new",
-    },
-    {
-      id: "3",
-      studentName: "Jessica Lee",
-      property: "Campus Villa",
-      message: "Are pets allowed in the compound?",
-      email: "jessica.l@example.com",
-      phone: "+234 812 345 6789",
-      date: "1 day ago",
-      status: "contacted",
-    },
-  ]);
+  // Transform real inquiries into Dashboard Leads
+  const leads = React.useMemo(() => {
+    if (!user) return [];
+
+    return inquiries
+      .filter((inq) => inq.agent.toLowerCase() === user.name.toLowerCase())
+      .map((inq) => {
+        let status: Lead["status"] = "new";
+        if (["Replied", "Contacted"].includes(inq.status)) status = "contacted";
+        if (["Closed", "Archived"].includes(inq.status)) status = "archived";
+
+        return {
+          id: inq.id.toString(),
+          studentName: inq.studentName,
+          property: inq.property,
+          message: inq.message || `Interested in ${inq.property}`,
+          email: inq.studentEmail,
+          phone: inq.studentPhone || "Not provided",
+          date: inq.date,
+          status,
+          agentReply: inq.agentReply,
+        };
+      });
+  }, [inquiries, user]);
 
   // Mock Analytics Data
   const analyticsData = [
@@ -198,8 +148,8 @@ const AgentDashboard = () => {
       setFormData({
         name: editingProperty.name,
         state: editingProperty.state,
-        schoolId: editingProperty.schoolId,
-        price: editingProperty.price.replace("₦", "").replace(/,/g, ""),
+        schoolId: editingProperty.schoolSlug, // Mapping schoolSlug to schoolId for form
+        price: editingProperty.rooms[0].price.toString(),
         about: editingProperty.about,
         gender: editingProperty.gender,
         distanceToCampus: editingProperty.distanceToCampus,
@@ -220,7 +170,7 @@ const AgentDashboard = () => {
       });
       setSelectedAmenities([]);
       setPropertyRooms([
-        { type: "Single Room", price: "", availability: "AVAILABLE" },
+        { type: "Single Room", price: 0, availability: "AVAILABLE" },
       ]);
       setSelectedImages([]);
     }
@@ -236,16 +186,35 @@ const AgentDashboard = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       if (selectedImages.length >= 5) {
         toast.error("Maximum 5 images allowed");
         return;
       }
-      const newImages = Array.from(e.target.files).map((file) =>
-        URL.createObjectURL(file),
-      );
-      setSelectedImages((prev) => [...prev, ...newImages].slice(0, 5));
+
+      const files = Array.from(e.target.files);
+      const remainingSlots = 5 - selectedImages.length;
+      const filesToProcess = files.slice(0, remainingSlots);
+
+      const loadingToast = toast.loading("Processing images...");
+
+      try {
+        const processedImages = await Promise.all(
+          filesToProcess.map(async (file) => {
+            const base64 = await fileToBase64(file);
+            return await compressImage(base64);
+          }),
+        );
+
+        setSelectedImages((prev) => [...prev, ...processedImages]);
+        toast.dismiss(loadingToast);
+        toast.success("Images uploaded successfully");
+      } catch (error) {
+        console.error("Image processing failed", error);
+        toast.dismiss(loadingToast);
+        toast.error("Failed to process some images");
+      }
     }
   };
 
@@ -266,37 +235,46 @@ const AgentDashboard = () => {
       return;
     }
 
-    const school = institutions.find((i) => i.id === formData.schoolId);
-    const location = school
-      ? `${school.name}, ${formData.state}`
-      : formData.state;
     // Calculate starting price from rooms (min price)
     const minPrice =
       propertyRooms.length > 0
-        ? Math.min(...propertyRooms.map((r) => parseInt(r.price) || 0))
+        ? Math.min(...propertyRooms.map((r) => r.price || 0))
         : 0;
-    const formattedPrice = `₦${minPrice.toLocaleString()}`;
 
-    const newListing: Listing = {
-      id: editingProperty?.id || crypto.randomUUID(),
-      ...formData,
-      location,
-      price: formattedPrice,
-      status: "Pending", // Default to pending for new/edited
-      amenities: selectedAmenities,
+    const newHostel: Hostel = {
+      id: editingProperty?.id || `hostel-${crypto.randomUUID()}`,
+      slug:
+        (editingProperty as Hostel)?.slug ||
+        `${formData.name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`,
+      name: formData.name,
+      address: formData.name, // Using name as address for now if not provided
+      city: school?.city || "Campus Area",
+      state: formData.state,
+      country: "Nigeria",
+      distanceToCampus: formData.distanceToCampus,
+      verified: false,
+      agentVerified: true,
+      inspectionCompleted: false,
+      gender: formData.gender,
+      totalUnits: 0,
+      schoolSlug: school?.schoolSlug || "",
+      rating: 0,
+      reviews: 0,
+      startingPrice: minPrice,
       images: selectedImages,
+      amenities: selectedAmenities,
       rooms: propertyRooms,
-      policies: {
-        utilitiesIncluded: true,
-        refundableDeposit: true,
-        noHiddenFees: true,
-      },
+      utilitiesIncluded: true,
+      refundableDeposit: true,
+      noHiddenFees: true,
+      featured: false,
+      about: formData.about,
+      agentName: user?.name || "Unknown Agent",
+      createdAt: new Date().toISOString(),
     };
 
     if (editingProperty) {
-      setActiveListings((prev) =>
-        prev.map((l) => (l.id === editingProperty.id ? newListing : l)),
-      );
+      updateHostel(editingProperty.id, newHostel);
       toast.success("Listing updated successfully");
       const activityId = crypto.randomUUID();
       setActivities((prev) => [
@@ -309,7 +287,7 @@ const AgentDashboard = () => {
         ...prev,
       ]);
     } else {
-      setActiveListings((prev) => [newListing, ...prev]);
+      addHostel(newHostel);
       toast.success("New listing added successfully");
       const activityId = crypto.randomUUID();
       setActivities((prev) => [
@@ -327,37 +305,49 @@ const AgentDashboard = () => {
     setEditingProperty(null);
   };
 
-  const handleDelete = React.useCallback((id: string) => {
-    toast("Delete this listing?", {
-      description: "This action cannot be undone.",
-      action: {
-        label: "Delete",
-        onClick: () => {
-          const activityId = crypto.randomUUID();
-          setActiveListings((prev) => prev.filter((l) => l.id !== id));
-          setActivities((prev) => [
-            {
-              id: activityId,
-              text: "Deleted a listing",
-              time: "Just now",
-              type: "update",
-            },
-            ...prev,
-          ]);
-          toast.success("Listing deleted successfully");
+  const handleUpdateProfile = (updatedProfile: Partial<UserProfile>) => {
+    updateUser(updatedProfile);
+    toast.success("Profile updated successfully");
+  };
+
+  const handleDelete = React.useCallback(
+    (id: string) => {
+      toast("Delete this listing?", {
+        description: "This action cannot be undone.",
+        action: {
+          label: "Delete",
+          onClick: () => {
+            const activityId = crypto.randomUUID();
+            deleteHostel(id);
+            setActivities((prev) => [
+              {
+                id: activityId,
+                text: "Deleted a listing",
+                time: "Just now",
+                type: "update",
+              },
+              ...prev,
+            ]);
+            toast.success("Listing deleted successfully");
+          },
         },
-      },
-      cancel: {
-        label: "Cancel",
-        onClick: () => {},
-      },
-    });
-  }, []);
+        cancel: {
+          label: "Cancel",
+          onClick: () => {},
+        },
+      });
+    },
+    [deleteHostel],
+  );
 
   const updateLeadStatus = (id: string, status: Lead["status"]) => {
-    setLeads((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, status: status } : l)),
-    );
+    // Map Lead status back to Inquiry status
+    let inqStatus: Inquiry["status"] = "Pending";
+    if (status === "contacted") inqStatus = "Contacted";
+    if (status === "archived") inqStatus = "Archived";
+
+    updateInquiryStatus(parseInt(id), inqStatus);
+
     if (status === "contacted") toast.success("Marked as contacted");
     if (status === "archived") toast.success("Lead archived");
     setViewingLead(null);
@@ -423,18 +413,48 @@ const AgentDashboard = () => {
           viewingLead={viewingLead}
           setViewingLead={setViewingLead}
           updateLeadStatus={updateLeadStatus}
+          replyToInquiry={replyToInquiry}
         />
       </AnimatePresence>
 
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed left-0 top-0 bottom-0 z-50 lg:hidden">
+              <Sidebar
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                handleLogout={handleLogout}
+                onClose={() => setIsMobileMenuOpen(false)}
+              />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Sidebar */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         handleLogout={handleLogout}
+        className="fixed hidden lg:flex"
       />
 
       <main className="flex-1 lg:ml-64 relative">
         <TopBar
-          profile={profile}
           isMobileMenuOpen={isMobileMenuOpen}
           setIsMobileMenuOpen={setIsMobileMenuOpen}
           searchQuery={searchQuery}
@@ -484,7 +504,17 @@ const AgentDashboard = () => {
             )}
 
             {activeTab === "settings" && (
-              <SettingsTab profile={profile} setProfile={setProfile} />
+              <SettingsTab
+                initialData={{
+                  name: user?.name || "",
+                  agency: user?.agency || "",
+                  phone: user?.phone || "",
+                  email: user?.email || "",
+                  image: user?.image || null,
+                }}
+                onSave={handleUpdateProfile}
+                onReset={resetHostels}
+              />
             )}
           </motion.div>
         </div>

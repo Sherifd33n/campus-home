@@ -8,60 +8,57 @@ const WhyUs = () => {
   return (
     <div className="bg-[#f6f7f8] py-16">
       <Container className="text-center">
-        <p className="text-[#0d141c] text-2xl font-bold">
+        <h2 className="text-[#0d141c] text-2xl md:text-3xl font-bold">
           Why students love CampusHome
+        </h2>
+        <p className="text-[#78869a] text-sm md:text-base mt-2 mx-auto max-w-2xl px-4">
+          We have built the most trusted platform for student housing with tools
+          designed for your safety and budget.
         </p>
-        <p className="text-[#78869a] text-base mt-2 mx-[25%]">
-          We have built the most trusted platforms for students housing with
-          tools designed for your safety and budget.{" "}
-        </p>
 
-        <div className="mt-10 flex items-center justify-between">
-          <div className="w-[350px] rounded-xl bg-white p-7">
-            <p className="bg-[#eff6ff] rounded-md p-3.5 inline-flex">
-              <BsShieldFillCheck
-                size={26}
-                className="text-center mx-auto text-[#278cf1]"
-              />
-            </p>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 sm:px-0">
+          <div className="bg-white rounded-3xl p-8 border border-gray-50 shadow-sm hover:shadow-md transition-shadow group">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#278cf1] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform mx-auto">
+              <BsShieldFillCheck size={28} />
+            </div>
 
-            <p className="my-3 text-xl font-bold">Verified Listings</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Verified Listings
+            </h3>
 
-            <p className="text-sm text-[#8c98a9]">
-              Every properties is physically inspected and verified by our team
-              to prevent scams and ensure quality.
+            <p className="text-sm text-gray-500 leading-relaxed">
+              Every property is physically inspected and verified by our team to
+              prevent scams and ensure quality.
             </p>
           </div>
 
-          <div className="w-[350px] rounded-xl bg-white p-7">
-            <p className="bg-[#fff7ed] rounded-md p-3.5 inline-flex">
-              <TbLocationFilled
-                size={26}
-                className="text-center mx-auto text-[#f97316]"
-              />
-            </p>
+          <div className="bg-white rounded-3xl p-8 border border-gray-50 shadow-sm hover:shadow-md transition-shadow group">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 text-[#f97316] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform mx-auto">
+              <TbLocationFilled size={28} />
+            </div>
 
-            <p className="my-3 text-xl font-bold">Proximity to Campus</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Nearby Campus
+            </h3>
 
-            <p className="text-sm text-[#8c98a9]">
+            <p className="text-sm text-gray-500 leading-relaxed">
               Save time and transport costs. We prioritize hostels that are
-              withing 5-30mins walk from your school.
+              within 5-30mins walk from your school.
             </p>
           </div>
 
-          <div className="w-[350px] rounded-xl bg-white p-7">
-            <p className="bg-[#f0fdf4] rounded-md p-3.5 inline-flex">
-              <PiPiggyBankFill
-                size={26}
-                className="text-center mx-auto text-[#22c55e]"
-              />
-            </p>
+          <div className="bg-white rounded-3xl p-8 border border-gray-50 shadow-sm hover:shadow-md transition-shadow group md:col-span-2 lg:col-span-1">
+            <div className="w-14 h-14 rounded-2xl bg-green-50 text-[#22c55e] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform mx-auto">
+              <PiPiggyBankFill size={28} />
+            </div>
 
-            <p className="my-3 text-xl font-bold">Student Pricing</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Student Pricing
+            </h3>
 
-            <p className="text-sm text-[#8c98a9]">
-              Transparent pricing with no hidden agent fees. We generate the
-              best specifically for students budgets.
+            <p className="text-sm text-gray-500 leading-relaxed">
+              Transparent pricing with no hidden agent fees. We negotiate the
+              best specifically for students&apos; budgets.
             </p>
           </div>
         </div>

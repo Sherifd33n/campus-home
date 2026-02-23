@@ -1,11 +1,8 @@
 import { IoNotifications, IoSearch, IoMenu, IoTime } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 interface TopBarProps {
-  profile: {
-    name: string;
-    image: string | null;
-  };
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (isOpen: boolean) => void;
   searchQuery: string;
@@ -16,7 +13,6 @@ interface TopBarProps {
 }
 
 const TopBar: React.FC<TopBarProps> = ({
-  profile,
   isMobileMenuOpen,
   setIsMobileMenuOpen,
   searchQuery,
@@ -25,6 +21,13 @@ const TopBar: React.FC<TopBarProps> = ({
   setIsNotificationsOpen,
   activeTab,
 }) => {
+  const { user } = useAuth();
+
+  // Provide better defaults for the visual UI
+  const profile = {
+    name: user?.name || "Verified Agent",
+    image: user?.image || null,
+  };
   const notifications = [
     { id: 1, text: "New lead from John Doe", time: "2 mins ago", type: "lead" },
     {

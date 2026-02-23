@@ -15,7 +15,7 @@ export default function AllStatesPage() {
   const displayedStates = showAll ? states : states.slice(0, initialCount);
 
   return (
-    <div className="py-16 bg-gray-50">
+    <div className="p-2 sm:p-10 bg-gray-50">
       <Container className="px-6">
         <div className="flex items-center gap-3 text-[#7c8a9d] text-sm mb-5">
           <Link href="/" className="hover:text-[#278cf1]">
@@ -29,7 +29,8 @@ export default function AllStatesPage() {
           <p className="text-3xl font-semibold text-[#131b2d]">
             Find your home away from home
           </p>
-          <p className="texts-sm text-[#727d8c] mt-2 mr-[50%]">
+          <p className="texts-sm text-[#727d8c] mt-2 md:mr-[20%] xl:mr-[50%]">
+
             Explore student accommodations across the country. Choose a state to
             see our available hostels near your university.
           </p>
@@ -38,7 +39,7 @@ export default function AllStatesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12 ">
           {displayedStates.map((state) => (
             <div key={state.id} className="border rounded-2xl border-gray-300">
-              <div className="relative rounded-t-2xl overflow-hidden group h-52">
+              <div className="relative rounded-t-2xl overflow-hidden group h-40">
                 <Image
                   src={state.image}
                   alt={state.name}

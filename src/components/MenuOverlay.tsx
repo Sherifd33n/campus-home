@@ -87,80 +87,83 @@ const MenuOverlay = () => {
             over 1,000+ verified listings
           </p>
 
-          <h1 className="text-4xl md:text-5xl font-semibold mx-[20%]">
+          <h1 className="text-3xl md:text-5xl font-bold mx-auto max-w-2xl leading-tight">
             Find Your Perfect <span className="text-[#278cf1]">Home</span> Near
             Campus
           </h1>
 
-          <p className="mt-4 text-base text-gray-300 mx-[30%]">
+          <p className="mt-4 text-sm md:text-base text-gray-300 mx-auto max-w-xl">
             Connecting students with premium, verified hostels near campus.
             Secure your space for the upcoming session.
           </p>
 
           {error && (
-            <p className="mt-4 text-red-400 text-sm bg-red-900/30 px-4 py-2 rounded-md">
+            <p className="mt-4 text-red-400 text-xs bg-red-900/30 px-4 py-2 rounded-xl">
               {error}
             </p>
           )}
 
-          <div className="mt-6 bg-white px-4 py-3 rounded-2xl flex items-center justify-between gap-7">
+          <div className="mt-8 bg-white p-2 md:px-4 md:py-3 rounded-md flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-7 w-full max-w-4xl">
             {/* University Autocomplete */}
-            <UniversityAutocomplete
-              value={universityInput}
-              onChange={(val) => {
-                setUniversityInput(val);
-                // If the user edits after selecting, clear the selection
-                if (selectedInstitution) setSelectedInstitution(null);
-                setError("");
-              }}
-              onSelect={handleSelect}
-              onClear={handleClear}
-              error={error && !universityInput ? error : undefined}
-            />
-
-            <hr className="h-full w-0.5 bg-gray-200 rounded-full self-stretch" />
-
-            {/* Budget */}
-            <div className="flex items-center gap-2">
-              <IoPricetags size={20} className="text-[#278cf1] shrink-0" />
-              <div className="flex flex-col gap-0.5 items-start">
-                <p className="text-[10px] font-semibold text-gray-600">
-                  BUDGET
-                </p>
-                <input
-                  type="number"
-                  placeholder="e.g. 150000"
-                  className="text-gray-700 text-sm outline-none w-24"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                />
-              </div>
+            <div className="flex-1 min-w-0">
+              <UniversityAutocomplete
+                value={universityInput}
+                onChange={(val) => {
+                  setUniversityInput(val);
+                  if (selectedInstitution) setSelectedInstitution(null);
+                  setError("");
+                }}
+                onSelect={handleSelect}
+                onClear={handleClear}
+                error={error && !universityInput ? error : undefined}
+              />
             </div>
 
-            <hr className="h-full w-0.5 bg-gray-200 rounded-full self-stretch" />
+            <hr className="hidden md:block h-10 w-0.5 bg-gray-100 rounded-full" />
 
-            {/* Room Type */}
-            <div className="flex items-center gap-2">
-              <IoBedSharp size={20} className="text-[#278cf1] shrink-0" />
-              <div className="flex flex-col gap-0.5 items-start">
-                <p className="text-[10px] font-semibold text-gray-600">
-                  ROOM TYPE
-                </p>
-                <select
-                  className="text-gray-600 outline-none font-semibold text-sm"
-                  value={roomType}
-                  onChange={(e) => setRoomType(e.target.value)}>
-                  {roomTypes.map((room) => (
-                    <option key={room.type} value={room.type}>
-                      {room.type}
-                    </option>
-                  ))}
-                </select>
+            <div className="flex items-center gap-4 px-4 md:px-0">
+              {/* Budget */}
+              <div className="flex flex-1 items-center gap-2">
+                <IoPricetags size={20} className="text-[#278cf1] shrink-0" />
+                <div className="flex flex-col gap-0.5 items-start">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase">
+                    Budget
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="e.g. 150k"
+                    className="text-gray-700 text-sm outline-none w-20 md:w-24 bg-transparent"
+                    value={budget}
+                    onChange={(e) => setBudget(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <hr className="h-8 w-px bg-gray-100 md:hidden" />
+
+              {/* Room Type */}
+              <div className="flex flex-1 items-center gap-2">
+                <IoBedSharp size={20} className="text-[#278cf1] shrink-0" />
+                <div className="flex flex-col gap-0.5 items-start">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase">
+                    Type
+                  </p>
+                  <select
+                    className="text-gray-600 outline-none font-bold text-sm bg-transparent appearance-none"
+                    value={roomType}
+                    onChange={(e) => setRoomType(e.target.value)}>
+                    {roomTypes.map((room) => (
+                      <option key={room.type} value={room.type}>
+                        {room.type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
             <button
-              className="flex items-center gap-1 bg-[#278cf1] py-3 px-4 rounded-md text-sm cursor-pointer hover:opacity-60 duration-150 shrink-0 text-white"
+              className="flex items-center justify-center gap-2 bg-[#278cf1] py-4 md:py-3 px-8 rounded-md text-sm font-bold cursor-pointer hover:bg-[#1e74cc] transition-all shrink-0 text-white shadow-lg shadow-blue-500/20 active:scale-95"
               onClick={handleSearch}>
               <IoSearchSharp size={18} />
               Search

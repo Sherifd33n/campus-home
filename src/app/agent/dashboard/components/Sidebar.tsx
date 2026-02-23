@@ -13,12 +13,16 @@ interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   handleLogout: () => void;
+  onClose?: () => void;
+  className?: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   setActiveTab,
   handleLogout,
+  onClose,
+  className,
 }) => {
   const sidebarLinks = [
     { id: "overview", label: "Overview", icon: <IoStatsChart /> },
@@ -29,7 +33,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 bg-white border-r border-gray-100 z-30">
+    <aside
+      className={`flex flex-col w-64 h-screen bg-white border-r border-gray-100 z-30 ${className}`}>
       <div className="p-6 border-b border-gray-50 flex items-center justify-center">
         <Logo />
       </div>
@@ -38,7 +43,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         {sidebarLinks.map((link) => (
           <button
             key={link.id}
-            onClick={() => setActiveTab(link.id)}
+            onClick={() => {
+              setActiveTab(link.id);
+              if (onClose) onClose();
+            }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
               activeTab === link.id
                 ? "bg-[#278cf1] text-white shadow-lg shadow-blue-500/30"

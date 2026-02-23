@@ -1,6 +1,8 @@
-// app/states/[stateId]/[schoolSlug]/page.tsx
+"use client";
+
+import React, { use } from "react";
 import { institutions } from "@/data/listing";
-import { schoolHostels } from "@/data/hostel";
+import { useHostels } from "@/context/HostelContext";
 import { states } from "@/data/state";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
@@ -9,13 +11,14 @@ import HostelCard from "@/components/HostelCard";
 import Container from "@/components/Container";
 
 interface Props {
-  params: { stateId: string; schoolSlug: string };
-  searchParams?: { budget?: string; roomType?: string };
+  params: Promise<{ stateId: string; schoolSlug: string }>;
+  searchParams: Promise<{ budget?: string; roomType?: string }>;
 }
 
-export default async function SchoolPage({ params, searchParams }: Props) {
-  const { stateId, schoolSlug } = await params;
-  const resolvedSearchParams = await searchParams;
+export default function SchoolPage({ params, searchParams }: Props) {
+  const { stateId, schoolSlug } = use(params);
+  const resolvedSearchParams = use(searchParams);
+  const { getHostelsBySchool, isLoading } = useHostels();
 
   if (!stateId || !schoolSlug) {
     return <div className="p-10">Invalid URL parameters</div>;
@@ -32,10 +35,8 @@ export default async function SchoolPage({ params, searchParams }: Props) {
   // Get state info
   const state = states.find((s) => s.id === stateId);
 
-  // Filter hostels by schoolSlug
-  let schoolHostelsList = schoolHostels.filter(
-    (hostel) => hostel.schoolSlug?.toLowerCase() === schoolSlug.toLowerCase(),
-  );
+  // Filter hostels by schoolSlug using dynamic context
+  let schoolHostelsList = getHostelsBySchool(schoolSlug);
 
   // Apply filters from search params
   const budget = resolvedSearchParams?.budget;
@@ -66,7 +67,7 @@ export default async function SchoolPage({ params, searchParams }: Props) {
   );
 
   return (
-    <div className="p-10 bg-[#f6f7f8]">
+    <div className="p-2 md:p-10 bg-[#f6f7f8]">
       <Container>
         <div className="flex items-center gap-3 text-[#7c8a9d] text-sm mb-5">
           <Link href="/" className="hover:text-[#278cf1]">
@@ -81,16 +82,14 @@ export default async function SchoolPage({ params, searchParams }: Props) {
             {state?.name}
           </Link>
           <FaChevronRight size={10} />
-          <p className="text-[#278cf1]">{school.shortName}</p>
+          <p className="text-[#278cf1] truncate">{school.shortName}</p>
         </div>
 
-        {/* School Header */}
         <h1 className="text-3xl text-[#0f172a] font-semibold">{school.name}</h1>
         <p className="text-[#6b7686] text-base mt-2">
           {school.city}, {state?.name}
         </p>
 
-        {/* Filter Indicator */}
         {hasFilters && (
           <div className="mt-4 flex items-center gap-3 flex-wrap">
             <p className="text-sm text-gray-600">Active filters:</p>
@@ -115,14 +114,17 @@ export default async function SchoolPage({ params, searchParams }: Props) {
           </div>
         )}
 
-        {/* Hostels Section */}
         <div className="mt-10">
           <h2 className="text-2xl font-semibold text-[#0f172a] mb-5">
-            Available Hostels Near {school.shortName} (
-            {schoolHostelsList.length})
+            Available Hostels Near {school.shortName}{" "}
+            {!isLoading && `(${schoolHostelsList.length})`}
           </h2>
 
-          {schoolHostelsList.length === 0 ? (
+          {isLoading ? (
+            <div className="h-64 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            </div>
+          ) : schoolHostelsList.length === 0 ? (
             <div className="bg-white rounded-lg p-10 text-center">
               <p className="text-gray-500">
                 No hostels available for {school.shortName} yet.
@@ -137,7 +139,6 @@ export default async function SchoolPage({ params, searchParams }: Props) {
           )}
         </div>
 
-        {/* Other Schools in Same State */}
         {otherSchools.length > 0 && (
           <div className="mt-16">
             <h2 className="text-2xl font-semibold text-[#0f172a] mb-5">
@@ -156,9 +157,7 @@ export default async function SchoolPage({ params, searchParams }: Props) {
                     fill
                     className="object-cover group-hover:scale-105 transition duration-500"
                   />
-
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition"></div>
-
                   <div className="absolute bottom-4 left-4 text-white">
                     <p className="font-semibold text-lg">
                       {institution.shortName}

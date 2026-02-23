@@ -34,8 +34,8 @@ const ListingsTab: React.FC<ListingsTabProps> = ({
         </button>
       </div>
 
-      {/* Listings Table */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+      {/* Desktop Listings Table */}
+      <div className="hidden md:block bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50 border-b border-gray-100">
@@ -62,7 +62,7 @@ const ListingsTab: React.FC<ListingsTabProps> = ({
                   <td className="p-6">
                     <div className="flex items-center gap-4">
                       <img
-                        src={listing.images[0]}
+                        src={listing.images[0] || "/images/menu-image.jpg"}
                         alt={listing.name}
                         className="w-16 h-16 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform"
                       />
@@ -133,6 +133,78 @@ const ListingsTab: React.FC<ListingsTabProps> = ({
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile Listings Cards */}
+      <div className="md:hidden space-y-4">
+        {listings.map((listing) => (
+          <div
+            key={listing.id}
+            className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+            <div className="flex gap-4">
+              <img
+                src={listing.images[0]}
+                alt={listing.name}
+                className="w-20 h-20 rounded-xl object-cover shadow-sm"
+              />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <h4 className="font-bold text-gray-900 truncate">
+                    {listing.name}
+                  </h4>
+                  <span
+                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      listing.status === "Active"
+                        ? "bg-green-100 text-green-600"
+                        : "bg-amber-100 text-amber-600"
+                    }`}>
+                    {listing.status}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 mt-1 truncate">
+                  {listing.location}
+                </p>
+                <div className="mt-2 text-sm">
+                  <span className="font-bold text-[#278cf1]">
+                    {listing.price}
+                  </span>
+                  <span className="text-[10px] text-gray-400"> / year</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-gray-50">
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => {
+                    setViewingProperty(listing);
+                    setIsViewModalOpen(true);
+                  }}
+                  className="p-2.5 bg-blue-50 text-blue-600 rounded-xl active:scale-95 transition-all">
+                  <IoEye size={18} />
+                </button>
+                <button
+                  onClick={() => {
+                    setEditingProperty(listing);
+                    setIsPropertyModalOpen(true);
+                  }}
+                  className="p-2.5 bg-gray-50 text-gray-600 rounded-xl active:scale-95 transition-all">
+                  <IoPencil size={18} />
+                </button>
+                <button
+                  onClick={() => {}}
+                  className="p-2.5 bg-amber-50 text-amber-500 rounded-xl active:scale-95 transition-all">
+                  <IoRocket size={18} />
+                </button>
+              </div>
+              <button
+                onClick={() => handleDelete(listing.id)}
+                className="p-2.5 bg-red-50 text-red-600 rounded-xl active:scale-95 transition-all">
+                <IoTrash size={18} />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

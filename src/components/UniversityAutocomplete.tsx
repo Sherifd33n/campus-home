@@ -121,7 +121,7 @@ const UniversityAutocomplete: React.FC<UniversityAutocompleteProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex items-center gap-2 flex-1 min-w-0">
+      className="relative flex items-center gap-2 flex-1 min-w-0 pl-4 md:pl-0">
       <FaGraduationCap size={20} className="text-[#278cf1] shrink-0" />
       <div className="flex flex-col gap-0.5 items-start min-w-0 w-full">
         <p className="text-[10px] font-semibold text-gray-600">UNIVERSITY</p>

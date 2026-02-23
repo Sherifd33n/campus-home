@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "sonner";
 
 export interface Review {
   id: string;
@@ -59,7 +60,15 @@ export const ReviewProvider: React.FC<{ children: React.ReactNode }> = ({
   // Save to localStorage whenever reviews change, but only after hydration
   useEffect(() => {
     if (isHydrated) {
-      localStorage.setItem("hostel-reviews", JSON.stringify(reviews));
+      try {
+        localStorage.setItem("hostel-reviews", JSON.stringify(reviews));
+      } catch (e) {
+        if (e instanceof DOMException && e.name === "QuotaExceededError") {
+          toast.error("Review storage full.");
+        } else {
+          console.error("Failed to save reviews", e);
+        }
+      }
     }
   }, [reviews, isHydrated]);
 

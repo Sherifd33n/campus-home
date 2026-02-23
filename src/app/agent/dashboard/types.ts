@@ -1,27 +1,9 @@
+import { Hostel } from "@/data/hostel";
 
-export interface Listing {
-    id: string;
-    name: string;
-    location: string;
-    state: string;
-    schoolId: string;
-    price: string;
-    status: string;
-    about: string;
-    gender: string;
-    distanceToCampus: string;
-    amenities: string[];
-    images: string[];
-    rooms: {
-        type: string;
-        price: string;
-        availability: string;
-    }[];
-    policies: {
-        utilitiesIncluded: boolean;
-        refundableDeposit: boolean;
-        noHiddenFees: boolean;
-    };
+export interface Listing extends Hostel {
+  location: string;
+  price: number;
+  status: "Active" | "Pending";
 }
 
 export interface Lead {
@@ -33,6 +15,7 @@ export interface Lead {
     phone: string;
     date: string;
     status: "new" | "contacted" | "archived";
+    agentReply?: string;
 }
 
 export interface Activity {

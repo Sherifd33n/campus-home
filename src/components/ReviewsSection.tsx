@@ -40,7 +40,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   return (
     <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl font-bold text-[#0f172a]">
+        <h2 className="text-base md:text-xl font-bold text-[#0f172a]">
           Student Reviews ({allReviews.length})
         </h2>
         <button

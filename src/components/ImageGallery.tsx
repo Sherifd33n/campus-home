@@ -10,6 +10,8 @@ interface ImageGalleryProps {
   hostelName: string;
 }
 
+const PLACEHOLDER = "/images/menu-image.jpg";
+
 const ImageGallery = ({ images, hostelName }: ImageGalleryProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -52,16 +54,26 @@ const ImageGallery = ({ images, hostelName }: ImageGalleryProps) => {
     <>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[300px] md:h-[400px] mb-8">
         {/* Main Image */}
+
         <div
-          className="md:col-span-2 relative h-full rounded-l-2xl overflow-hidden shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
+          className="md:col-span-2 relative h-full rounded-2xl md:rounded-l-2xl overflow-hidden shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
           onClick={() => openModal(0)}>
           <Image
-            src={images[0]}
+            src={images[0] || PLACEHOLDER}
             alt={hostelName}
             fill
             className="object-cover"
             priority
           />
+
+          {/* Mobile Overlay */}
+          {images.length > 1 && (
+            <div className="absolute inset-0 md:hidden bg-black/40 flex items-center justify-center text-white">
+              <span className="text-2xl font-semibold">
+                +{images.length - 1}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Middle Stack */}
@@ -72,7 +84,7 @@ const ImageGallery = ({ images, hostelName }: ImageGalleryProps) => {
               className="relative overflow-hidden shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
               onClick={() => openModal(idx)}>
               <Image
-                src={images[idx] || images[0]}
+                src={images[idx] || images[0] || PLACEHOLDER}
                 alt={`${hostelName} view ${idx + 1}`}
                 fill
                 className="object-cover"
@@ -86,14 +98,16 @@ const ImageGallery = ({ images, hostelName }: ImageGalleryProps) => {
           className="hidden md:block relative h-full rounded-r-2xl overflow-hidden shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
           onClick={() => openModal(3)}>
           <Image
-            src={images[3] || images[0]}
+            src={images[3] || images[0] || PLACEHOLDER}
             alt={`${hostelName} view 4`}
             fill
             className="object-cover"
           />
           {images.length > 4 && (
             <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white">
-              <span className="text-2xl font-semibold">+{images.length - 4}</span>
+              <span className="text-2xl font-semibold">
+                +{images.length - 4}
+              </span>
               <span className="text-sm font-medium tracking-wider">
                 View All Images
               </span>
@@ -151,7 +165,7 @@ const ImageGallery = ({ images, hostelName }: ImageGalleryProps) => {
               className="relative w-full max-w-5xl h-[70vh] px-4"
               onClick={(e) => e.stopPropagation()}>
               <Image
-                src={images[currentIndex]}
+                src={images[currentIndex] || PLACEHOLDER}
                 alt={`${hostelName} fullscreen view`}
                 fill
                 className="object-contain"

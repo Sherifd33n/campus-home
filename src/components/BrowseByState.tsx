@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { states } from "@/data/state";
@@ -8,7 +8,6 @@ import Container from "./Container";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
 
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
@@ -16,35 +15,22 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 export default function StateSlider() {
-  const prevRef = useRef<HTMLButtonElement | null>(null);
-  const nextRef = useRef<HTMLButtonElement | null>(null);
-  const [swiperInstance] = useState<SwiperType | null>(null);
-
-  useEffect(() => {
-    if (swiperInstance && prevRef.current && nextRef.current) {
-      swiperInstance.navigation.init();
-      swiperInstance.navigation.update();
-    }
-  }, [swiperInstance]);
-
   return (
     <div className="py-12 bg-gray-50">
       <Container className="px-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-semibold">Browse by States</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 text-center sm:text-left">
+          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
+            Browse by States
+          </h2>
 
-          <div className="flex gap-3">
-            <button
-              ref={prevRef}
-              className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-200 transition">
-              <FaChevronLeft size={14} />
+          <div className="flex justify-center sm:justify-end gap-3">
+            <button className="browse-prev w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition shadow-sm active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed">
+              <FaChevronLeft size={14} className="text-gray-600" />
             </button>
 
-            <button
-              ref={nextRef}
-              className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-200 transition">
-              <FaChevronRight size={14} />
+            <button className="browse-next w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition shadow-sm active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed">
+              <FaChevronRight size={14} className="text-gray-600" />
             </button>
           </div>
         </div>
@@ -53,12 +39,9 @@ export default function StateSlider() {
           modules={[Navigation]}
           spaceBetween={20}
           slidesPerView={1}
-          navigation
-          onBeforeInit={(swiper: SwiperType) => {
-            if (typeof swiper.params.navigation !== "boolean") {
-              swiper.params.navigation!.prevEl = prevRef.current;
-              swiper.params.navigation!.nextEl = nextRef.current;
-            }
+          navigation={{
+            prevEl: ".browse-prev",
+            nextEl: ".browse-next",
           }}
           breakpoints={{
             640: { slidesPerView: 2 },
@@ -89,7 +72,7 @@ export default function StateSlider() {
             <Link
               href="/states"
               className="relative h-65 rounded-2xl flex items-center justify-center bg-[#278cf1] text-white text-xl font-semibold hover:bg-[#1f74cc] transition">
-              View All States <FaArrowRight  className="ml-3"/>
+              View All States <FaArrowRight className="ml-3" />
             </Link>
           </SwiperSlide>
         </Swiper>

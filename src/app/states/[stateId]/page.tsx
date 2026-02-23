@@ -15,7 +15,7 @@ export default async function StatePage({ params }: Props) {
   if (!state) return <div className="p-10">State not found</div>;
 
   return (
-    <div className="p-10 bg-[#f6f7f8]">
+    <div className="p-2 md:p-10 bg-[#f6f7f8]">
       <Container>
          <div className="flex items-center gap-3 text-[#7c8a9d] text-sm">
         <Link href="/" className="hover:text-[#278cf1]">

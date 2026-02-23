@@ -7,7 +7,7 @@ import HomePage from "@/components/HomePage";
 
 export default function Home() {
   return (
-    <div className="">
+    <div className="overflow-x-hidden">
       {/* <Container> */}
       {/* <Navbar /> */}
       <div>

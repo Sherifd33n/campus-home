@@ -32,7 +32,7 @@ const ComparisonPage = () => {
           choose the best one for you.
         </p>
         <Link
-          href="/"
+          href="/states"
           className="px-8 py-3 bg-[#278cf1] text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:scale-105 transition-transform">
           Browse Hostels
         </Link>
@@ -41,20 +41,20 @@ const ComparisonPage = () => {
   }
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen py-12 mt-16 pb-20">
+    <div className="bg-[#f8fafc] min-h-screen py-12 pb-20">
       <Container>
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
               Compare Hostels
             </h1>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-gray-500 text-xs lg:text-sm mt-1">
               Comparing {comparedHostels.length} of 4 max hostels
             </p>
           </div>
           <button
             onClick={clearComparison}
-            className="text-red-500 text-sm font-bold bg-red-200 px-2 py-1 rounded-full cursor-pointer hover:opacity-60 duration-150">
+            className="w-fit text-red-500 text-xs font-bold bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl transition-colors">
             Clear All
           </button>
         </div>

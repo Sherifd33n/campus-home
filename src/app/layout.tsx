@@ -10,6 +10,7 @@ import { ComparisonProvider } from "@/context/ComparisonContext";
 import { AuthProvider } from "@/context/AuthContext";
 
 import { ReviewProvider } from "@/context/ReviewContext";
+import { HostelProvider } from "@/context/HostelContext";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -31,18 +32,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.className} antialiased`}>
-        <ReviewProvider>
-          <FavoriteProvider>
-            <AuthProvider>
-              <ComparisonProvider>
-                <LayoutWrapper>{children}</LayoutWrapper>
+        <HostelProvider>
+          <ReviewProvider>
+            <FavoriteProvider>
+              <AuthProvider>
+                <ComparisonProvider>
+                  <LayoutWrapper>{children}</LayoutWrapper>
 
-                {/* Toast Notifications */}
-                <Toaster position="top-center" richColors />
-              </ComparisonProvider>
-            </AuthProvider>
-          </FavoriteProvider>
-        </ReviewProvider>
+                  {/* Toast Notifications */}
+                  <Toaster position="top-center" richColors />
+                </ComparisonProvider>
+              </AuthProvider>
+            </FavoriteProvider>
+          </ReviewProvider>
+        </HostelProvider>
       </body>
     </html>
   );

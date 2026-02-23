@@ -8,7 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 function FavoritesPage() {
   return (
-    <div className="p-10 bg-[#f6f7f8] min-h-screen">
+    <div className="p-4 sm:p-10 bg-[#f6f7f8] min-h-screen sm:mt-0">
       <Container>
         <div className="flex items-center gap-3 text-[#7c8a9d] text-sm mb-5">
           <Link href="/" className="hover:text-[#278cf1]">

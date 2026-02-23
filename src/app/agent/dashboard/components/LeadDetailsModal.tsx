@@ -7,12 +7,14 @@ interface LeadDetailsModalProps {
   viewingLead: Lead | null;
   setViewingLead: (lead: Lead | null) => void;
   updateLeadStatus: (id: string, status: Lead["status"]) => void;
+  replyToInquiry: (id: number, reply: string) => void;
 }
 
 const LeadDetailsModal: React.FC<LeadDetailsModalProps> = ({
   viewingLead,
   setViewingLead,
   updateLeadStatus,
+  replyToInquiry,
 }) => {
   if (!viewingLead) return null;
 
@@ -54,7 +56,7 @@ const LeadDetailsModal: React.FC<LeadDetailsModalProps> = ({
               <h3 className="font-bold text-gray-900">
                 {viewingLead.studentName}
               </h3>
-              <p className="text-xs text-gray-500">Studen</p>
+              <p className="text-xs text-gray-500">Student</p>
               <div className="flex gap-2 mt-2">
                 <a
                   href={`mailto:${viewingLead.email}`}
@@ -87,13 +89,52 @@ const LeadDetailsModal: React.FC<LeadDetailsModalProps> = ({
                 &quot;{viewingLead.message}&quot;
               </p>
             </div>
+            {viewingLead.agentReply && (
+              <div className="pt-2 border-t border-gray-200">
+                <span className="text-xs font-bold text-blue-500 uppercase">
+                  Your Reply
+                </span>
+                <p className="text-sm text-gray-700 mt-1">
+                  {viewingLead.agentReply}
+                </p>
+              </div>
+            )}
             <div className="flex items-center gap-2 text-xs text-gray-400 pt-2 border-t border-gray-200">
               <span>Received {viewingLead.date}</span>
             </div>
           </div>
 
+          {!viewingLead.agentReply && (
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-gray-500 uppercase">
+                Quick Reply
+              </label>
+              <textarea
+                id="agent-reply-box"
+                className="w-full p-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Type your message to the student..."
+                rows={3}
+              />
+              <button
+                onClick={() => {
+                  const replyText = (
+                    document.getElementById(
+                      "agent-reply-box",
+                    ) as HTMLTextAreaElement
+                  ).value;
+                  if (replyText.trim()) {
+                    replyToInquiry(Number(viewingLead.id), replyText);
+                    setViewingLead(null);
+                  }
+                }}
+                className="w-full py-2 bg-[#278cf1] text-white rounded-lg text-sm font-bold hover:bg-[#1e72c5]">
+                Send Message
+              </button>
+            </div>
+          )}
+
           <div className="flex gap-3 pt-4">
-            {viewingLead.status !== "contacted" && (
+            {viewingLead.status !== "contacted" && !viewingLead.agentReply && (
               <button
                 onClick={() => updateLeadStatus(viewingLead.id, "contacted")}
                 className="flex-1 px-4 py-3 bg-[#278cf1] text-white rounded-xl font-bold shadow-lg shadow-blue-500/20 hover:bg-[#1e72c5]">
