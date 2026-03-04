@@ -20,13 +20,13 @@ const Footer = () => {
             Quick Links
           </p>
           <ul className="text-gray-500 flex flex-col gap-2.5 text-sm font-medium">
-            <li>
+            {/* <li>
               <Link
                 href="/hostels"
                 className="hover:text-[#278cf1] transition-colors">
                 Search Hostels
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/about"

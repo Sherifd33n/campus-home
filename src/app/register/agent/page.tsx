@@ -291,7 +291,7 @@ const AgentRegistrationPage = () => {
                   <div className="flex justify-end">
                     <button
                       type="button"
-                      className="text-xs font-bold text-[#278cf1] hover:underline">
+                      className="text-xs font-bold text-[#278cf1] hover:underline cursor-pointer">
                       Forgot Password?
                     </button>
                   </div>
@@ -389,7 +389,7 @@ const AgentRegistrationPage = () => {
                       <button
                         type="button"
                         onClick={() => setShowPassword((v) => !v)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
                         {showPassword ? <IoEyeOff /> : <IoEye />}
                       </button>
                     </div>
@@ -413,7 +413,7 @@ const AgentRegistrationPage = () => {
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword((v) => !v)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
                         {showConfirmPassword ? <IoEyeOff /> : <IoEye />}
                       </button>
                     </div>
@@ -425,7 +425,7 @@ const AgentRegistrationPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#278cf1] text-white py-4 rounded-xl font-bold hover:bg-[#1e72c5] transition-all shadow-lg shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center mt-4">
+                className="w-full bg-[#278cf1] text-white py-4 rounded-xl font-bold hover:bg-[#1e72c5] transition-all shadow-lg shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center mt-4 cursor-pointer">
                 {loading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3" />
