@@ -45,7 +45,7 @@ const TopBar: React.FC<TopBarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 bg-white/80 backdrop-blur-xl border-b border-gray-100 p-4 md:p-6 flex items-center justify-between z-20">
+    <header className="sticky top-0 bg-white/80 backdrop-blur-xl border-b border-gray-100 p-4 md:p-6 flex items-center justify-between z-40">
       <div className="flex items-center gap-4">
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -81,47 +81,63 @@ const TopBar: React.FC<TopBarProps> = ({
 
           <AnimatePresence>
             {isNotificationsOpen && (
-              <motion.div
-                key="notifications-dropdown"
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute right-0 mt-4 w-80 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden z-50">
-                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                  <h3 className="font-bold text-gray-900">Notifications</h3>
-                  <button className="text-xs text-blue-600 font-bold">
-                    Mark all as read
-                  </button>
-                </div>
-                <div className="max-h-96 overflow-y-auto">
-                  {notifications.map((notif) => (
-                    <div
-                      key={notif.id}
-                      className="p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 flex gap-3">
+              <>
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsNotificationsOpen(false)}
+                  className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+                />
+
+                {/* Modal */}
+                <motion.div
+                  key="notifications-modal"
+                  initial={{ opacity: 0, scale: 0.9, x: "-50%", y: "-50%" }}
+                  animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+                  exit={{ opacity: 0, scale: 0.9, x: "-50%", y: "-50%" }}
+                  className="fixed left-1/2 top-1/2 w-[90%] max-w-md bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden z-50">
+                  <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                    <h3 className="font-bold text-gray-900 text-lg">
+                      Notifications
+                    </h3>
+                    <button className="text-xs text-blue-600 font-bold hover:underline">
+                      Mark all as read
+                    </button>
+                  </div>
+                  <div className="max-h-[60vh] overflow-y-auto">
+                    {notifications.map((notif) => (
                       <div
-                        className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                          notif.type === "lead"
-                            ? "bg-blue-500"
-                            : notif.type === "stat"
-                              ? "bg-green-500"
-                              : "bg-amber-500"
-                        }`}
-                      />
-                      <div>
-                        <p className="text-sm text-gray-800 leading-tight">
-                          {notif.text}
-                        </p>
-                        <p className="text-[10px] text-gray-400 mt-1 flex items-center gap-1">
-                          <IoTime /> {notif.time}
-                        </p>
+                        key={notif.id}
+                        className="p-5 hover:bg-blue-50/30 transition-colors border-b border-gray-50 flex gap-4 group">
+                        <div
+                          className={`w-3 h-3 rounded-full mt-1.5 shrink-0 shadow-sm ${
+                            notif.type === "lead"
+                              ? "bg-blue-500"
+                              : notif.type === "stat"
+                                ? "bg-green-500"
+                                : "bg-amber-500"
+                          }`}
+                        />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-800 leading-relaxed group-hover:text-blue-900 transition-colors">
+                            {notif.text}
+                          </p>
+                          <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1.5 font-medium">
+                            <IoTime className="text-gray-300" /> {notif.time}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-                <button className="w-full p-4 text-center text-sm font-bold text-gray-500 hover:bg-gray-50 transition-colors">
-                  View All Notifications
-                </button>
-              </motion.div>
+                    ))}
+                  </div>
+                  <div className="p-4 bg-gray-50/50">
+                    <button className="w-full py-3.5 text-center text-sm font-bold text-gray-600 hover:text-blue-600 hover:bg-white rounded-xl transition-all border border-transparent hover:border-blue-100 shadow-xs">
+                      View All Notifications
+                    </button>
+                  </div>
+                </motion.div>
+              </>
             )}
           </AnimatePresence>
         </div>

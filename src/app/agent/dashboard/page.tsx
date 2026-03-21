@@ -52,7 +52,7 @@ const AgentDashboard = () => {
   });
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [propertyRooms, setPropertyRooms] = useState<
-    { type: string; price: number; availability: string }[]
+    { type: string; price: string | number; availability: string }[]
   >([{ type: "Single Room", price: 0, availability: "AVAILABLE" }]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
@@ -72,9 +72,16 @@ const AgentDashboard = () => {
 
   const activeListings = React.useMemo(() => {
     if (!user) return [];
-    return hostels.filter(
-      (h) => h.agentName.toLowerCase() === user.name.toLowerCase(),
-    );
+    return hostels
+      .filter((h) => h.agentName.toLowerCase() === user.name.toLowerCase())
+      .map((h) => ({
+        ...h,
+        location: `${h.address}, ${h.city}`,
+        price: h.startingPrice,
+        status: (h.agentVerified ? "Active" : "Pending") as
+          | "Active"
+          | "Pending",
+      }));
   }, [hostels, user]);
 
   // Leads State
@@ -238,7 +245,7 @@ const AgentDashboard = () => {
     // Calculate starting price from rooms (min price)
     const minPrice =
       propertyRooms.length > 0
-        ? Math.min(...propertyRooms.map((r) => r.price || 0))
+        ? Math.min(...propertyRooms.map((r) => Number(r.price) || 0))
         : 0;
 
     const newHostel: Hostel = {
@@ -263,7 +270,7 @@ const AgentDashboard = () => {
       startingPrice: minPrice,
       images: selectedImages,
       amenities: selectedAmenities,
-      rooms: propertyRooms,
+      rooms: propertyRooms.map((r) => ({ ...r, price: Number(r.price) || 0 })),
       utilitiesIncluded: true,
       refundableDeposit: true,
       noHiddenFees: true,

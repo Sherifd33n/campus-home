@@ -4,23 +4,24 @@ export interface Listing extends Hostel {
   location: string;
   price: number;
   status: "Active" | "Pending";
+  isAdminVerified?: boolean;
 }
 
 export interface Lead {
-    id: string;
-    studentName: string;
-    property: string;
-    message: string;
-    email: string;
-    phone: string;
-    date: string;
-    status: "new" | "contacted" | "archived";
-    agentReply?: string;
+  id: string;
+  studentName: string;
+  property: string;
+  message: string;
+  email: string;
+  phone: string;
+  date: string;
+  status: "new" | "contacted" | "archived";
+  agentReply?: string;
 }
 
 export interface Activity {
-    id: string;
-    text: string;
-    time: string;
-    type: string;
+  id: string;
+  text: string;
+  time: string;
+  type: string;
 }
