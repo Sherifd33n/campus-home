@@ -130,7 +130,7 @@ const ViewListingModal: React.FC<ViewListingModalProps> = ({
                       </span>
                       <div className="text-right">
                         <p className="font-bold text-[#278cf1]">
-                          ₦{parseInt(room.price).toLocaleString()}
+                          ₦{Number(room.price).toLocaleString()}
                         </p>
                         <p className="text-[10px] text-gray-400">
                           {room.availability}

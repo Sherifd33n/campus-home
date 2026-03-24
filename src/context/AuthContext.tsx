@@ -82,6 +82,7 @@ interface AuthContextType {
   ) => void;
   addDocument: (documentData: Omit<UserDocument, "id" | "date">) => void;
   markNotificationAsRead: (id: string) => void;
+  markAllNotificationsAsRead: () => void;
   updateInquiryStatus: (id: number, status: Inquiry["status"]) => void;
   replyToInquiry: (id: number, reply: string) => void;
   isLoading: boolean;
@@ -158,7 +159,7 @@ function saveAccounts(accounts: StoredAccount[]): void {
    ========================= */
 
 const safeStorage = {
-  set: (key: string, value: any) => {
+  set: (key: string, value: unknown) => {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (e) {
@@ -413,10 +414,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const updatedNotifications = prev.notifications.map((n) =>
         n.id === id ? { ...n, isRead: true } : n,
       );
-      localStorage.setItem(
-        NOTIFICATIONS_KEY,
-        JSON.stringify(updatedNotifications),
-      );
+      safeStorage.set(NOTIFICATIONS_KEY, updatedNotifications);
+      return { ...prev, notifications: updatedNotifications };
+    });
+  };
+
+  const markAllNotificationsAsRead = () => {
+    setState((prev) => {
+      const updatedNotifications = prev.notifications.map((n) => ({
+        ...n,
+        isRead: true,
+      }));
+      safeStorage.set(NOTIFICATIONS_KEY, updatedNotifications);
       return { ...prev, notifications: updatedNotifications };
     });
   };
@@ -483,6 +492,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         addNotification,
         addDocument,
         markNotificationAsRead,
+        markAllNotificationsAsRead,
         updateInquiryStatus,
         replyToInquiry,
         isLoading: state.isLoading,

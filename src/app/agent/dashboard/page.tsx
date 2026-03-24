@@ -25,7 +25,7 @@ import { Listing, Lead, Activity } from "./types";
 
 const AgentDashboard = () => {
   const router = useRouter();
-  const { user, updateUser, inquiries, updateInquiryStatus, replyToInquiry } =
+  const { user, updateUser, logout, inquiries, updateInquiryStatus, replyToInquiry } =
     useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [activeLeadTab, setActiveLeadTab] = useState<
@@ -361,8 +361,9 @@ const AgentDashboard = () => {
   };
 
   const handleLogout = React.useCallback(() => {
+    logout();
     router.push("/");
-  }, [router]);
+  }, [router, logout]);
 
   // Stats Logic
   const stats = [
