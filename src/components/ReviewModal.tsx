@@ -41,6 +41,11 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       return;
     }
 
+    if (!user) {
+      toast.error("You must be logged in to submit a review");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
