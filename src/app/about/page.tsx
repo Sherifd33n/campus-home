@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Container from "@/components/Container";
 import { motion } from "framer-motion";

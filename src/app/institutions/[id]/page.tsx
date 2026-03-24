@@ -6,14 +6,15 @@ import { institutions } from "@/data/listing";
 const hostels: any[] = [];
 
 interface InstitutionPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function InstitutionPage({ params }: InstitutionPageProps) {
-  const institution = institutions.find((inst) => inst.id === params.id);
+export default async function InstitutionPage({ params }: InstitutionPageProps) {
+  const { id } = await params;
+  const institution = institutions.find((inst) => inst.id === id);
 
   const filteredHostels = hostels.filter(
-    (hostel) => hostel.institutionId === params.id,
+    (hostel) => hostel.institutionId === id,
   );
 
   if (!institution) return <div className="p-10">Institution not found</div>;
