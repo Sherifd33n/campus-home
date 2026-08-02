@@ -9,6 +9,8 @@ import { FaChevronRight } from "react-icons/fa";
 import Image from "next/image";
 import HostelCard from "@/components/HostelCard";
 import Container from "@/components/Container";
+import { HostelCardSkeletonGrid, EmptyState } from "@/components/common";
+import { IoBedOutline } from "react-icons/io5";
 
 interface Props {
   params: Promise<{ stateId: string; schoolSlug: string }>;
@@ -121,15 +123,19 @@ export default function SchoolPage({ params, searchParams }: Props) {
           </h2>
 
           {isLoading ? (
-            <div className="h-64 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            </div>
+            <HostelCardSkeletonGrid count={8} />
           ) : schoolHostelsList.length === 0 ? (
-            <div className="bg-white rounded-lg p-10 text-center">
-              <p className="text-gray-500">
-                No hostels available for {school.shortName} yet.
-              </p>
-            </div>
+            <EmptyState
+              icon={
+                <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center">
+                  <IoBedOutline className="text-[#278cf1] text-3xl" />
+                </div>
+              }
+              title={`No hostels found near ${school.shortName}`}
+              description={hasFilters ? "Try adjusting or clearing your filters to see more results." : "We don't have any listings for this institution yet. Check back soon!"}
+              actionLabel={hasFilters ? "Clear Filters" : undefined}
+              actionHref={hasFilters ? `/states/${stateId}/${schoolSlug}` : undefined}
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {schoolHostelsList.map((hostel) => (

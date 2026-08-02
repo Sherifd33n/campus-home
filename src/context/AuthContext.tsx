@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { validateEmail, validatePassword } from "@/lib/validators";
+import { setAuthToken, clearAuthTokens } from "@/services/api.client";
 
 /* =========================
    TYPES
@@ -68,7 +69,7 @@ interface AuthContextType {
   inquiries: Inquiry[];
   notifications: Notification[];
   documents: UserDocument[];
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   signup: (
     userData: Omit<UserProfile, "role">,
     role: "student" | "agent",
@@ -86,6 +87,9 @@ interface AuthContextType {
   updateInquiryStatus: (id: number, status: Inquiry["status"]) => void;
   replyToInquiry: (id: number, reply: string) => void;
   isLoading: boolean;
+  isAuthenticated: boolean;
+  isAgent: boolean;
+  isStudent: boolean;
 }
 
 interface AuthState {
@@ -255,11 +259,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => clearTimeout(timer);
   }, []);
 
+  /* Listen for unauthorized events dispatched by api.client (JWT expiry / 401) */
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setState((prev) => ({ ...prev, user: null }));
+      localStorage.removeItem(SESSION_KEY);
+      clearAuthTokens();
+    };
+    window.addEventListener("unauthorized", handleUnauthorized);
+    return () => window.removeEventListener("unauthorized", handleUnauthorized);
+  }, []);
+
   /* =========================
      LOGIN
   ========================= */
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, rememberMe = true) => {
     // Client-side field validation
     const emailErr = validateEmail(email);
     if (emailErr) throw new Error(emailErr);
@@ -284,7 +299,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const user: UserProfile = profile;
 
     setState((prev) => ({ ...prev, user }));
-    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    if (rememberMe) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    } else {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    }
+    // Issue a mock JWT token for API-readiness
+    setAuthToken("mock-jwt-" + Date.now());
   };
 
   /* =========================
@@ -331,6 +352,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = () => {
     setState((prev) => ({ ...prev, user: null }));
     localStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(SESSION_KEY);
+    clearAuthTokens();
   };
 
   /* =========================
@@ -496,6 +519,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         updateInquiryStatus,
         replyToInquiry,
         isLoading: state.isLoading,
+        isAuthenticated: state.user !== null,
+        isAgent: state.user?.role === "agent",
+        isStudent: state.user?.role === "student",
       }}>
       {children}
     </AuthContext.Provider>

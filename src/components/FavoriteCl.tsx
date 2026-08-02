@@ -6,6 +6,7 @@ import HostelCard from "@/components/HostelCard";
 import { FaHeart } from "react-icons/fa";
 import Link from "next/link";
 import { toast } from "sonner";
+import { EmptyState } from "@/components/common";
 
 interface Hostel {
   id: string;
@@ -51,26 +52,17 @@ export default function FavoritesClient() {
 
   if (favoriteHostels.length === 0) {
     return (
-      <div className="bg-white rounded-lg p-5 md:p-16 text-center">
-        <div className="max-w-md mx-auto">
-          <div className="w-20 h-20 bg-[#e9f3fe] rounded-full flex items-center justify-center mx-auto mb-6">
+      <EmptyState
+        icon={
+          <div className="w-20 h-20 bg-[#e9f3fe] rounded-full flex items-center justify-center">
             <FaHeart className="text-[#278cf1] text-3xl" />
           </div>
-          <h2 className="text-2xl font-semibold text-[#0f172a] mb-3">
-            No Favorites Yet
-          </h2>
-          <p className="text-[#6b7686] mb-6">
-            Start exploring hostels by states and save your favorites by
-            clicking the heart icon. They will appear here for easy access.
-          </p>
-
-          <Link
-            href="/states"
-            className="inline-block text-sm bg-[#278cf1] text-white px-5 py-2 rounded-lg hover:bg-[#1f7dd4] transition">
-            Browse by States
-          </Link>
-        </div>
-      </div>
+        }
+        title="No Favorites Yet"
+        description="Start exploring hostels by states and save your favorites by clicking the heart icon. They will appear here for easy access."
+        actionLabel="Browse by States"
+        actionHref="/states"
+      />
     );
   }
 

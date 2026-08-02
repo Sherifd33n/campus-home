@@ -30,6 +30,7 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ScheduleVisitModal from "@/components/ScheduleVisitModal";
 import ReservationModal from "@/components/ReservationModal";
 import BookingModal from "@/components/BookingModal";
+import { HostelDetailSkeleton } from "@/components/common";
 
 interface Props {
   slug: string;
@@ -45,11 +46,7 @@ export default function HostelDetailsClient({ slug }: Props) {
   const hostel = getHostelBySlug(slug);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return <HostelDetailSkeleton />;
   }
 
   if (!hostel) {
@@ -202,7 +199,7 @@ export default function HostelDetailsClient({ slug }: Props) {
                           </td>
                           <td className="px-6 py-5">
                             <span
-                              className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide inline-flex items-center justify-center min-w-[100px] ${
+                              className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide inline-flex items-center justify-center min-w-25 ${
                                 room.availability === "AVAILABLE"
                                   ? "bg-green-50 text-green-700 border border-green-100"
                                   : "bg-red-50 text-red-700 border border-red-100"
